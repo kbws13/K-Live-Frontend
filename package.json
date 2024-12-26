@@ -1,0 +1,17 @@
+{
+    "name": "k-live-frontend",
+    "version": "1.0.0",
+    "description": "Imitation of Bilibili project frontend",
+    "scripts": {
+        "start:admin": "npm --prefix ./packages/admin run dev"
+    },
+    "author": "空白无上",
+    "license": "ISC",
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "concurrently": "^9.0.1",
+        "lerna": "^8.1.9"
+    }
+}

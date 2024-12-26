@@ -1,0 +1,4 @@
+node_modules/
+.idea/
+.vscode/
+packages/admin/node_modules/
