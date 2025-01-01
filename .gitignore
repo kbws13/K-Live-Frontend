@@ -2,3 +2,4 @@ node_modules/
 .idea/
 .vscode/
 packages/admin/node_modules/
+packages/web/node_modules/

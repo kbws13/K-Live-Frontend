@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Imitation of Bilibili project frontend",
     "scripts": {
+        "start:web": "npm --prefix ./packages/web run dev",
         "start:admin": "npm --prefix ./packages/admin run dev"
     },
     "author": "空白无上",
