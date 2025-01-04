@@ -9,6 +9,7 @@ import App from './App.vue'
 import router from './router'
 
 import '@/assets/icon/iconfont.css'
+import '@/assets/scss/base.scss'
 
 const app = createApp(App)
 
@@ -17,4 +18,6 @@ app.use(ElementPlus)
 app.use(ArcoVue)
 app.use(router)
 app.config.globalProperties.VueCookies = VueCookies;
+app.config.globalProperties.bodyMaxWidth = 2000;
+app.config.globalProperties.bodyMinWidth = 1250;
 app.mount('#app')
