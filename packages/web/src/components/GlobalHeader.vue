@@ -1,7 +1,25 @@
 <template>
     <div :class="['header-bar', 'header-bar-' + theme]">
         <div class="menu">
-            <router-link class="iconfont icon-logo" to="/">首页</router-link>
+            <el-popover :width="categoryPartCount * (150 + 21) + 24" trigger="hover" :show-arrow="false" :offset="22"
+                placement="bottom-start">
+                <template #reference>
+                    <router-link class="iconfont icon-logo menu-item" to="/">首页</router-link>
+                </template>
+                <div class="nav-list">
+                    <div class="nav-part" v-for="index in categoryPartCount">
+                        <router-link class="nav-item" v-for="item in categoryStore.categoryList.slice(
+                            (index - 1) * partCount,
+                            (index - 1) * partCount + partCount
+                        )" :to="`/v/${item.code}`">
+                            <span class="icon" v-if="item.icon">
+                                <img :src="`${Resource.getResource}${item.icon}`" />
+                            </span>
+                            <span class="category-name">{{ item.name }}</span>
+                        </router-link>
+                    </div>
+                </div>
+            </el-popover>
         </div>
         <div class="search-body">
             <div class="search-panel">
@@ -76,10 +94,12 @@
 </template>
 <script lang="ts" setup>
 import { UserService } from '@/api';
+import { Resource } from '@/api/core/Url';
 import type { UserVO } from '@/api/models/response/User/UserVO';
+import { useCategoryStore } from '@/stores/CategoryStore';
 import { userLoginStore } from '@/stores/UserStore';
 import Message from '@/utils/Message';
-import { getCurrentInstance, onMounted, ref } from 'vue';
+import { computed, getCurrentInstance, onMounted, ref } from 'vue';
 
 
 const prop = defineProps({
@@ -92,23 +112,24 @@ const prop = defineProps({
 // @ts-ignore
 const { proxy } = getCurrentInstance();
 const loginStore = userLoginStore();
+const categoryStore = useCategoryStore();
 
 const login = () => {
     loginStore.setLogin(true);
 }
 
 const userCountInfo = ref<UserVO>();
-const getUserCountInfo = async() => {
+const getUserCountInfo = async () => {
     const res = await UserService.getUserInfo(loginStore.userInfo.id);
-    if(!res) return;
+    if (!res) return;
     userCountInfo.value = res;
     loginStore.saveUserInfo(res);
 }
 
-const logout = async() => {
+const logout = async () => {
     proxy.Confirm({
         message: "确定要退出吗？",
-        okfun: async() => {
+        okfun: async () => {
             await UserService.logout();
             proxy.VueCookies.remove("token");
             loginStore.saveUserInfo({} as UserVO);
@@ -116,6 +137,12 @@ const logout = async() => {
         }
     })
 }
+
+// 分类列表
+const partCount = 5;
+const categoryPartCount = computed(() => {
+    return Math.ceil(categoryStore.categoryList.length / partCount);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -250,10 +277,12 @@ const logout = async() => {
 
                     .count-info-item {
                         text-align: center;
+
                         .count-title {
                             color: var(--text3);
                             margin-top: 5px;
                         }
+
                         .count-value {
                             text-align: center;
                             color: var(--text);
@@ -271,12 +300,15 @@ const logout = async() => {
                     text-decoration: none;
                     display: flex;
                     justify-content: space-between;
+
                     .item-name {
                         flex: 1;
                     }
+
                     &::before {
                         margin-right: 15px;
                     }
+
                     &:hover {
                         background: #e8e8e8;
                         border-radius: 5px;
@@ -293,9 +325,11 @@ const logout = async() => {
 
             &:hover {
                 overflow: visible;
+
                 .avatar {
                     transform: scale(2) translateY(10px) translateX(-10px);
                 }
+
                 .user-info-panel {
                     opacity: 1;
                 }
@@ -354,6 +388,50 @@ const logout = async() => {
 
     a {
         color: #61666d;
+    }
+}
+
+.nav-list {
+    display: flex;
+
+    .nav-part {
+        &:last-child {
+            border-right: none;
+        }
+
+        padding: 0 10px;
+        border-right: 1px solid #ddd;
+
+        .nav-item {
+            display: flex;
+            padding: 0 10px;
+            height: 35px;
+            border-radius: 3px;
+            cursor: pointer;
+            align-items: center;
+            width: 150px;
+            text-decoration: none;
+            color: #2f3238;
+
+            &:hover {
+                background: #ddd;
+            }
+
+            .icon {
+                width: 25px;
+                height: 25px;
+                overflow: hidden;
+                margin-right: 5px;
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .category-name {
+                flex: 1;
+            }
+        }
     }
 }
 </style>

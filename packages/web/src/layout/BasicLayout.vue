@@ -1,10 +1,20 @@
 <template>
   <div class="main-container"
     :style="{ 'max-width': proxy.bodyMaxWidth + 'px', 'min-width': proxy.bodyMinWidth + 'px' }">
-    <div class="header">
-      <GlobalHeader />
+    <div class="header" v-show="navigatorStore.showHeader" :style="{
+      'background-image': `url(${backgroundImage
+        ? backgroundImage
+        : Local.getLocalImage('banner_bg.png')
+        })`,
+    }">
+      <GlobalHeader theme="light" />
     </div>
-    <div class="header-fixed" v-if="showFixedHeader">
+    <div class="header-fixed" v-show="(navigatorStore.fixedHeader && showFixedHeader) ||
+      navigatorStore.forceFixedHeader
+      " :style="{
+        'max-width': proxy.bodyMaxWidth + 'px',
+        'min-width': proxy.bodyMinWidth + 'px',
+      }">
       <GlobalHeader theme="dark" />
     </div>
     <div class="category-fixed" v-show="navigatorStore.fixedCategory && showFixedCategory" :style="{
@@ -40,13 +50,15 @@
 <script lang="ts" setup>
 import GlobalHeader from '@/components/GlobalHeader.vue';
 import LoginView from '@/views/User/LoginView.vue';
-import { getCurrentInstance, onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
+import { computed, getCurrentInstance, onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 import { CategoryService } from '@/api/services/CategoryService';
 import { useCategoryStore } from '@/stores/CategoryStore';
 import type { Category } from '@/api/models/response/Category/Category';
 import CategoryWidget from './CategoryWidget.vue';
 import { useNavigatorStore } from '@/stores/NavigatorStore';
 import { mitter } from '@/event/eventBus';
+import { Resource } from '@/api/core/Url';
+import Local from '@/utils/Local';
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();
@@ -86,6 +98,17 @@ const lineCategoryMouseHandler = (type: number) => {
   mouseOver.value = type === 1;
 }
 
+const backgroundImage = computed(() => {
+  const background = categoryStore.currentCategory
+    ? categoryStore.currentCategory.background
+    : null
+  if (background) {
+    return Resource.getResource + background
+  } else {
+    return null
+  }
+})
+
 onBeforeMount(() => {
   loadCategory();
 })
@@ -114,8 +137,6 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   height: 180px;
-  background-image: url(../assets/banner_bg.png);
-
 }
 
 .header-fixed {
