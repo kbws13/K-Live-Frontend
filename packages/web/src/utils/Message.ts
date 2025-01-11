@@ -13,7 +13,7 @@ const Message = {
             }
         })
     },
-    warning: (msg: string, callback: Function) => {
+    warning: (msg: string, callback?: Function) => {
         message.warning({
             id: 'warningId',
             content: msg,

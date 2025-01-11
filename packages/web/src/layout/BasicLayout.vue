@@ -32,7 +32,6 @@
       <div class="category" v-show="navigatorStore.showCategory">
         <CategoryWidget :showType="0"></CategoryWidget>
       </div>
-      <div style="height: 2000px;"></div>
       <div class="body-main">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in" appear>

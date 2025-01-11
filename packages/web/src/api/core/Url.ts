@@ -1,5 +1,11 @@
+export const Interact = {
+    postDanmu: "/interact/danmu/postDanmu",
+    loadDanmu: "/interact/danmu/loadDanmu",
+}
+
 export const Resource = {
     getResource: "/resource/getResource?sourceName=",
+    videoResource: "/resource/videoResource",
 }
 
 export const Web = {
@@ -10,4 +16,6 @@ export const Web = {
     getUserInfo: "/web/home/getUserInfo",
 
     getAllCategory: "/web/category/getAllCategory",
+
+    getRecommendVideo: "/web/video/getRecommendVideo",
 }

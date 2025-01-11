@@ -15,6 +15,9 @@ import '@/assets/scss/base.scss'
 import Dialog from '@/components/Dialog.vue';
 import Cover from '@/components/Cover.vue';
 import Avatar from '@/components/Avatar.vue';
+import LoadMoreList from '@/components/LoadMoreList.vue';
+import VideoItem from '@/components/VideoItem.vue';
+import NoData from '@/components/NoData.vue';
 
 const app = createApp(App)
 
@@ -25,10 +28,17 @@ app.use(router)
 app.component("Dialog", Dialog)
 app.component("Cover", Cover)
 app.component("Avatar", Avatar)
+app.component("LoadMoreList", LoadMoreList)
+app.component("VideoItem", VideoItem)
+app.component("NoData", NoData)
 app.config.globalProperties.Confirm = Confirm;
 app.config.globalProperties.VueCookies = VueCookies;
 app.config.globalProperties.bodyMaxWidth = 2000;
 app.config.globalProperties.bodyMinWidth = 1250;
 //顶部分类，一行多少个分类
 app.config.globalProperties.rowCategoryCount = 10;
+//轮播最多显示的视频数
+app.config.globalProperties.carouselMaxCount = 5;
+//bodyPaddingWidth
+app.config.globalProperties.bodyPadding = 150
 app.mount('#app')
