@@ -29,4 +29,6 @@ app.config.globalProperties.Confirm = Confirm;
 app.config.globalProperties.VueCookies = VueCookies;
 app.config.globalProperties.bodyMaxWidth = 2000;
 app.config.globalProperties.bodyMinWidth = 1250;
+//顶部分类，一行多少个分类
+app.config.globalProperties.rowCategoryCount = 10;
 app.mount('#app')

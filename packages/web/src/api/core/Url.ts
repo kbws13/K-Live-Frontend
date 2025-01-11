@@ -8,4 +8,6 @@ export const Web = {
     logout: "/web/user/logout",
     autoLogin: "/web/user/autoLogin",
     getUserInfo: "/web/home/getUserInfo",
+
+    getAllCategory: "/web/category/getAllCategory",
 }
