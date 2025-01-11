@@ -6,6 +6,7 @@
         <div class="header-fixed" v-if="showFixedHeader">
           <GlobalHeader theme="dark" />
         </div>
+        <LoginView />
         <div style="height: 2000px;"></div>
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in" appear>
@@ -19,18 +20,15 @@
 
 <script lang="ts" setup>
 import GlobalHeader from '@/components/GlobalHeader.vue';
+import LoginView from '@/views/User/LoginView.vue';
 import { getCurrentInstance, onMounted, ref } from 'vue';
 
 const { proxy } = getCurrentInstance();
 
 const showFixedHeader = ref(false);
 const windowScrollHandler = () => {
-    var curScrollTop = window.scrollY;    
-    if (curScrollTop <= 20) {
-        showFixedHeader.value = false;
-    } else {
-        showFixedHeader.value = true;
-    }
+  const curScrollTop = window.scrollY;
+  showFixedHeader.value = curScrollTop > 20;
 }
 onMounted(() => {
     window.addEventListener('scroll', windowScrollHandler);
@@ -44,7 +42,7 @@ body {
 .header {
     position: relative;
     width: 100%;
-    margin: 0px auto;
+    margin: 0 auto;
     background-color: #7c9ce1;
     background-position: center;
     background-repeat: no-repeat;
@@ -55,12 +53,12 @@ body {
 .header-fixed {
     position: fixed;
     width: 100%;
-    top: 0px;
+    top: 0;
     background: #fff;
 }
 .main-container {
     background: #fff;
-    margin: 0px auto;
+    margin: 0 auto;
     min-height: calc(100vh);
 }
 /* 内容区域过渡动画：淡入淡出效果 */

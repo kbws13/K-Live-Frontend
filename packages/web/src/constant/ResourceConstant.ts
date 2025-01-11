@@ -1,0 +1,1 @@
+export const imgaeThumbnailSuffix = "_thumbnail.jpg";
