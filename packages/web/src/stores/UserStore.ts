@@ -8,6 +8,8 @@ const userLoginStore = defineStore('loginState', {
             userInfo: {
 
             } as UserVO,
+            messageNoReadCount: 0,
+            deviceId: '',
         }
     },
     actions: {
@@ -17,6 +19,15 @@ const userLoginStore = defineStore('loginState', {
         saveUserInfo(userInfo: UserVO) {
             this.userInfo = userInfo;
         },
+        saveMessageNoReadCount(count: number) {
+            this.messageNoReadCount = count;
+        },
+        readMessageCount(count: number) {
+            this.messageNoReadCount -= count;
+        },
+        saveDeviceId(deviceId: string) {
+            this.deviceId = deviceId;
+        }
     }
 })
 

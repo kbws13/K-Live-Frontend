@@ -10,7 +10,7 @@ export type Video = {
     status: number,
     postType: number,
     originInfo: string,
-    tags: string,
+    tags: any,
     introduction: string,
     interaction: string,
     duration: string,
@@ -24,4 +24,7 @@ export type Video = {
     lastPlayTime: Date,
     createTime: Date,
     updateTime: Date,
+    likeCountActive?: boolean,
+    collectCountActive?: boolean,
+    coinCountActive?: boolean,
 }

@@ -8,7 +8,7 @@
             <div id="danmu" v-show="showDanmu"></div>
             <div v-show="!showDanmu" class="close-danmu">已关闭弹幕</div>
         </div>
-        <div id="play"><img :src="proxy.Utils.getLocalImage('play.png')" /></div>
+        <div id="play"><img :src="Local.getLocalImage('play.png')" /></div>
     </div>
 </template>
 
@@ -22,12 +22,13 @@ import artplayerPluginDanmuku from 'artplayer-plugin-danmuku'
 import { mitter } from '@/event/eventBus';
 import Message from '@/utils/Message';
 import { useRoute } from 'vue-router';
-import type { DanmuPostRequest } from '@/api/models/request/Danmu/DanmuPostRequest';
 import { DanmuService } from '@/api/services/DanmuService';
 import type { Danmu } from '@/api/models/response/Danmu/Danmu';
+import Local from '@/utils/Local';
+import { VideoService } from '@/api/services/VideoService';
 
 
-const loginState = userLoginStore();
+const loginStore = userLoginStore();
 const route = useRoute()
 const props = defineProps({
     fileId: {
@@ -143,7 +144,7 @@ const initPlayer = () => {
             }),
         ],
     })
-    player.on('hover', (state) => {
+    player.on('hover', (state: any) => {
         let display = 'none'
         if (state) {
             display = 'flex'
@@ -173,14 +174,21 @@ const changeWideScreen = () => {
 
 const fileId = ref()
 const postDanmu = async (danmu: Danmu) => {
-    if (Object.keys(loginState.userInfo).length === 0) {
-        loginState.setLogin(true)
+    if (Object.keys(loginStore.userInfo).length === 0) {
+        loginStore.setLogin(true)
         return
     }
     danmu.fileId = fileId.value
     danmu.videoId = route.params.videoId[0]
     danmu.time = Math.round(danmu.time)
-    //   await DanmuService.postDanmu();
+    await DanmuService.postDanmu({
+        videoId: danmu.videoId,
+        fileId: fileId.value,
+        text: danmu.text,
+        model: danmu.mode,
+        color: danmu.color,
+        time: danmu.time,
+    });
 }
 
 //弹幕数量
@@ -246,18 +254,14 @@ const reportVideoPlayOnline = async () => {
     if (!fileId.value) {
         return
     }
-    let result = await proxy.Request({
-        url: proxy.Api.reportVideoPlayOnline,
-        params: {
+    let result = await VideoService.reportVideoPlayOnline({
             fileId: fileId.value,
             deviceId: loginStore.deviceId,
-        },
-        showError: false,
-    })
+        })
     if (!result) {
         return
     }
-    onLineCount.value = result.data
+    onLineCount.value = result
 }
 
 const cleanTimer = () => {
