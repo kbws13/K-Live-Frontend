@@ -1,0 +1,17 @@
+export type VideoPost = {
+    id: string,
+    cover: string,
+    name: string,
+    userId: string,
+    categoryId: string,
+    parentCategoryId: string,
+    status: number,
+    postType: number,
+    originInfo: string,
+    tags: string,
+    introduction: string,
+    interaction: string,
+    duration: number,
+    createTime: Date,
+    updateTime: Date,
+}

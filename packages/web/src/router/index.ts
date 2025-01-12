@@ -5,12 +5,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      redirect: '/',
+      name: 'index',
+      redirect: '/home',
       component: () => import('@/layout/BasicLayout.vue'),
       children: [
         {
-          path: '/',
+          path: '/home',
           name: 'home',
           component: () => import('@/views/Home/HomeView.vue'),
         },
@@ -29,6 +29,24 @@ const router = createRouter({
           name: 'subCategoryVideo',
           component: () => import('@/views/VideoList/CategoryVideo.vue'),
         },
+      ]
+    },
+    {
+      path: '/createCenter',
+      name: "创作中心",
+      component: () => import('@/layout/CreateCenterLayout.vue'),
+      redirect: '/createCenter/home',
+      children: [
+        {
+          path: '/createCenter/home',
+          name: '用户中心首页',
+          component: () => import('@/views/CreateCenter/Home.vue'),
+        },
+        {
+          path: '/createCenter/postVideo',
+          name: '上传视频',
+          component: () => import('@/views/CreateCenter/Post.vue'),
+        }
       ]
     },
     {

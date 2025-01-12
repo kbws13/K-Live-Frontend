@@ -1,35 +1,36 @@
 <template>
-    <Dialog :show="dialogConfig.show" :title="dialogConfig.title" :buttons="dialogConfig.buttons" width="1000px"
-        @close="dialogConfig.show = false">
-        <div class="cut-image-panel">
-            <VueCropper ref="cropperRef" class="cropper" :img="sourceImage" outputType="png" :autoCrop="true"
-                :autoCropWidth="props.cutWidth" :autoCropHeight="Math.round(props.cutWidth * props.scale)" :fixed="true"
-                :fixedNumber="[1, props.scale]" :centerBox="true" :full="false" :fixedBox="true" @realTime="prview"
-                mode="100%">
-            </VueCropper>
-            <div class="preview-panel">
-                <div class="preview-image">
-                    <img :src="previewsImage" />
-                </div>
-                <el-upload :multiple="false" :show-file-list="false" :http-request="selectFile"
-                    :accept="proxy.imageAccept">
-                    <el-button class="select-btn" type="primary" @click="">选择图片</el-button>
-                </el-upload>
-            </div>
+  <Dialog :show="dialogConfig.show" :title="dialogConfig.title" :buttons="dialogConfig.buttons" width="1000px"
+    @close="dialogConfig.show = false">
+    <div class="cut-image-panel">
+      <VueCropper ref="cropperRef" class="cropper" :img="sourceImage" outputType="png" :autoCrop="true"
+        :autoCropWidth="props.cutWidth" :autoCropHeight="Math.round(props.cutWidth * props.scale)" :fixed="true"
+        :fixedNumber="[1, props.scale]" :centerBox="true" :full="false" :fixedBox="true" @realTime="prview" mode="100%">
+      </VueCropper>
+      <div class="preview-panel">
+        <div class="preview-image">
+          <img :src="previewsImage" />
         </div>
-        <div class="info">
-            建议上传至少{{ props.cutWidth }}*{{
-                Math.round(props.cutWidth * props.scale)
-            }}的图片
-        </div>
-    </Dialog>
+        <el-upload :multiple="false" :show-file-list="false" :http-request="selectFile" :accept="proxy.imageAccept">
+          <el-button class="select-btn" type="primary" @click="">选择图片</el-button>
+        </el-upload>
+      </div>
+    </div>
+    <div class="info">
+      建议上传至少{{ props.cutWidth }}*{{
+        Math.round(props.cutWidth * props.scale)
+      }}的图片
+    </div>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
 import Message from '@/utils/Message';
-import { inject, nextTick, ref } from 'vue';
+import { getCurrentInstance, inject, nextTick, ref } from 'vue';
+import { VueCropper } from 'vue-cropper'
+import 'vue-cropper/dist/index.css'
 
-
+// @ts-ignore
+const { proxy } = getCurrentInstance()
 /**
  * 参数说明
   img: '', // 裁剪图片的地址 url 地址, base64, blob
@@ -53,7 +54,7 @@ import { inject, nextTick, ref } from 'vue';
   mode: 'contain' // 图片默认渲染方式 contain , cover, 100px, 100% auto
  */
 
- const props = defineProps({
+const props = defineProps({
   cutWidth: {
     type: Number,
     default: 400,
@@ -147,5 +148,39 @@ const cutImage = () => {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
+.cut-image-panel {
+  display: flex;
+
+  .cropper {
+    flex: 1;
+    height: 500px;
+  }
+
+  .preview-panel {
+    width: 200px;
+    margin-left: 20px;
+    text-align: center;
+
+    .preview-image {
+      width: 100%;
+      height: 200px;
+      background: #f6f6f6;
+      display: flex;
+      align-items: center;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .select-btn {
+    margin-top: 20px;
+  }
+}
+
+.info {
+  color: #6b6b6b;
+}
 </style>

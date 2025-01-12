@@ -22,7 +22,7 @@
             </el-popover>
         </div>
         <div class="search-body">
-            <div class="search-panel">
+            <div class="search-panel" @click.stop v-if="route.path !== '/search'">
                 <div class="search-panel-inner">
                     <div class="input-panel">
                         <input />
@@ -67,19 +67,21 @@
                 </template>
                 <Avatar v-else :width="35" :lazy="false" @click="login"></Avatar>
             </div>
-            <div class="user-panel-item">
-                <div class="iconfont icon-message"></div>
+            <div class="user-panel-item" @click="navJump('/message')">
+                <el-badge :value="loginStore.messageNoReadCount" :hidden="loginStore.messageNoReadCount === 0">
+                    <div class="iconfont icon-message"></div>
+                </el-badge>
                 <div>消息</div>
             </div>
-            <div class="user-panel-item">
+            <div class="user-panel-item" @click="navJump(`/user/${loginStore.userInfo.id}/collection`)">
                 <div class="iconfont icon-collection"></div>
                 <div>收藏</div>
             </div>
-            <div class="user-panel-item">
+            <div class="user-panel-item" @click="navJump('/history')">
                 <div class="iconfont icon-history"></div>
                 <div>历史</div>
             </div>
-            <div class="user-panel-item">
+            <div class="user-panel-item" @click="navJump('/createCenter/home')">
                 <div class="iconfont icon-light"></div>
                 <div>创作中心</div>
             </div>
@@ -96,10 +98,12 @@
 import { UserService } from '@/api';
 import { Resource } from '@/api/core/Url';
 import type { UserVO } from '@/api/models/response/User/UserVO';
+import { mitter } from '@/event/eventBus';
 import { useCategoryStore } from '@/stores/CategoryStore';
 import { userLoginStore } from '@/stores/UserStore';
 import Message from '@/utils/Message';
-import { computed, getCurrentInstance, onMounted, ref } from 'vue';
+import { computed, getCurrentInstance, onMounted, onUnmounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 
 const prop = defineProps({
@@ -111,6 +115,8 @@ const prop = defineProps({
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();
+const route = useRoute();
+const router = useRouter();
 const loginStore = userLoginStore();
 const categoryStore = useCategoryStore();
 
@@ -125,6 +131,14 @@ const getUserCountInfo = async () => {
     userCountInfo.value = res;
     loginStore.saveUserInfo(res);
 }
+
+const navJump = (url: string) => {
+    if (Object.keys(loginStore.userInfo).length === 0) {
+        loginStore.setLogin(true);
+        return;
+    }
+    window.open(url, "_blank");
+};
 
 const logout = async () => {
     proxy.Confirm({
@@ -142,6 +156,30 @@ const logout = async () => {
 const partCount = 5;
 const categoryPartCount = computed(() => {
     return Math.ceil(categoryStore.categoryList.length / partCount);
+});
+
+const showHistory = ref(false);
+const onSearchFocus = () => {
+    showHistory.value = true;
+};
+
+const searchInputRef = ref();
+
+onMounted(() => {
+    document.addEventListener("click", () => {
+        showHistory.value = false;
+    });
+    mitter.on("windowScroll", () => {
+        if (showHistory.value) {
+            //滚动的时候手动blur否则光标没移除，再次点击下拉搜索不弹出
+            searchInputRef.value.blur();
+            showHistory.value = false;
+        }
+    });
+});
+
+onUnmounted(() => {
+    mitter.off("windowScroll");
 });
 </script>
 

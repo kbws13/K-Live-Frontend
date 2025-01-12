@@ -16,6 +16,7 @@ type Api = {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     body: any,
     dataType: 'form' | 'json' | 'url',
+    uploadProgressCallback?: Function,
 }
 
 //请求前拦截器
@@ -86,6 +87,11 @@ const request = <T>(config: Api): Promise<T> => {
         method: config.method,
         data: config.method === 'GET' ? undefined : (config.dataType == 'json' ? config.body : formData),
         // withCredentials: true,
+        onUploadProgress: (event) => {
+            if(config.uploadProgressCallback) {
+                config.uploadProgressCallback(event);
+            }
+        },
     });
 };
 

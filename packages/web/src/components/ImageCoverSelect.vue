@@ -1,18 +1,20 @@
 <template>
-    <div class="cover" :style="{ width: coverWidth + 'px', height: coverWidth * props.scale + 'px' }">
-        <el-image :src="coverFile" fit="scale-down" :width="cutWidth" v-if="coverFile!">
-            <template #error>
-                <div class="iconfont icon-image-error"></div>
-            </template>
-        </el-image>
-        <div class="mask" @click="selectImage">{{ props.coverImage ? "重新上传" : "上传" }}</div>
-    </div>
-    <ImageCoverCut ref="imageCoverCutRef" :cutWidth="props.cutWidth" :scale="props.scale"></ImageCoverCut>
+  <div class="cover" :style="{ width: coverWidth + 'px', height: coverWidth * props.scale + 'px' }">
+    <el-image :src="coverFile" fit="scale-down" :width="cutWidth" v-if="coverFile!">
+      <template #error>
+        <div class="iconfont icon-image-error"></div>
+      </template>
+    </el-image>
+    <div class="mask" @click="selectImage">{{ props.coverImage ? "重新上传" : "上传" }}</div>
+  </div>
+  <ImageCoverCut ref="imageCoverCutRef" :cutWidth="props.cutWidth" :scale="props.scale"></ImageCoverCut>
 </template>
 
 <script lang="ts" setup>
 import { Resource } from '@/api/core/Url'
 import { getCurrentInstance, ref } from 'vue'
+import { asyncComputed } from '@vueuse/core'
+import ImageCoverCut from './ImageCoverCut.vue'
 
 // @ts-ignore
 const { proxy } = getCurrentInstance()
@@ -60,10 +62,6 @@ const convertFile2Base64 = (file) => {
 const imageCoverCutRef = ref()
 const selectImage = async () => {
   imageCoverCutRef.value.show()
-}
-
-function asyncComputed(arg0: () => Promise<unknown>) {
-    throw new Error('Function not implemented.')
 }
 </script>
 

@@ -11,9 +11,12 @@ export const Interact = {
 }
 
 export const Resource = {
-    getResource: "/resource/getResource?sourceName=",
-    videoResource: "/resource/videoResource",
-    uploadImage: "/resource/uploadImage",
+    getResource: "/file/getResource?sourceName=",
+    videoResource: "/file/videoResource",
+    uploadImage: "/file/uploadImage",
+    preUploadVideo: "/file/preUploadVideo",
+    uploadVideo: "/file/uploadVideo",
+    delUploadVide: "/file/delUploadVide",
 }
 
 export const Web = {
@@ -32,5 +35,13 @@ export const Web = {
 
     focus: "/web/home/focus",
     cancelFocus: "/web/home/cancelFocus",
+
+    getActualTime: "/web/statistic/getActualTime",
+    getWeek: "/web/statistic/getWeek",
+
+    addPostVideo: "/web/createCenter/addPostVideo",
+    getVideoInfoById: "/web/createCenter/getVideoInfoById",
+
+    getSystemSetting: "/web/systemSetting/getSystemSetting",
 
 }

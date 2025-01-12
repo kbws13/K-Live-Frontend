@@ -1,11 +1,6 @@
 <template>
   <div id="app">
-    <template v-if="route.path.startsWith('/user')">
-      <router-view />
-    </template>
-    <template v-else>
-      <BasicLayout />
-    </template>
+    <router-view></router-view>
   </div>
 </template>
 <script setup lang="ts">
@@ -15,9 +10,20 @@ import { useRoute } from "vue-router";
 import VueCookies from 'vue-cookies'
 import { UserService } from "./api";
 import { userLoginStore } from "./stores/UserStore";
+import { SystemSettingService } from "./api/services/SystemSettingService";
+import { useSystemSettingStore } from "./stores/SystemSettingStore";
+import { useCategoryStore } from "./stores/CategoryStore";
+import type { Category } from "./api/models/response/Category/Category";
+import { CategoryService } from "./api/services/CategoryService";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const route = useRoute();
 const loginStore = userLoginStore();
+const systemSettingStore = useSystemSettingStore();
+const categoryStore = useCategoryStore();
+
+let categoryList: Category[] = [];
+let categoryMap: { [key: string]: Category } = {};
 
 /**
  * 全局初始化函数
@@ -35,8 +41,42 @@ const autoLogin = async() => {
   loginStore.saveUserInfo(res);
 }
 
+const loadSystemSetting = async () => {
+  const res = await SystemSettingService.getSystemSetting();
+  systemSettingStore.saveSetting(res);
+}
+
+const loadCategory = async() => {
+  const res = await CategoryService.getAllCategory();
+  categoryList = res;
+  res.forEach((element) => {
+    categoryMap[element.code] = element;
+    element.children.forEach((sub) => {
+      categoryMap[sub.code] = sub;
+    });
+  });
+  categoryStore.saveCategoryMap(categoryMap);
+  categoryStore.saveCategoryList(categoryList);
+}
+
+const loadDeviceId = async () => {
+  // @ts-ignore
+  let deviceId = VueCookies.get("deviceId");
+  if (!deviceId) {
+    const fpPromise = await FingerprintJS.load();
+    const result = await fpPromise.get();
+    deviceId = result.visitorId;
+    // @ts-ignore
+    VueCookies.set("deviceId", deviceId, -1);
+  }
+  loginStore.saveDeviceId(deviceId);
+};
+
 onBeforeMount(() => {
+  loadDeviceId();
   autoLogin();
+  loadSystemSetting();
+  loadCategory();
 })
 
 onMounted(() => {
