@@ -51,7 +51,7 @@
                                     </template>
                                 </el-input>
                             </div>
-                            <img :src="checkCodeInfo?.checkCode" @click="changeCheckCode">
+                            <img :src="checkCodeInfo?.checkCode" @click="changeCheckCode" alt="">
                         </div>
                     </el-form-item>
                 </div>
@@ -68,6 +68,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElForm, ElFormItem, ElButton, ElInput, ElDivider } from 'element-plus';
 import { UserService } from '@/api';
 import type { UserLoginRequest } from '@/api/models/request/User/UserLoginRequest';
 import type { CheckCodeVO } from '@/api/models/response/User/CheckCodeVO';
@@ -196,7 +197,7 @@ const submit = async () => {
         }
 
         .bottom-btn {
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
     }
 }

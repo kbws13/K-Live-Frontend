@@ -8,9 +8,11 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
+import type { PropType } from "vue";
+
+defineProps({
     tags: {
-        type: Array,
+        type: Array as PropType<{ name: string }[]>,
     },
     modelValue: {
         type: Number,

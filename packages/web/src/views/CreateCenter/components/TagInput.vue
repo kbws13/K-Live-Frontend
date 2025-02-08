@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElTag, ElInput } from 'element-plus';
 import Message from '@/utils/Message';
 import { ref } from 'vue';
 
@@ -52,7 +53,7 @@ const inputChange = () => {
     display: flex;
     flex-wrap: wrap;
     border-radius: 5px;
-    padding: 0px 10px;
+    padding: 0 10px;
 
     .tag-list {
         .tag-item {
@@ -67,7 +68,7 @@ const inputChange = () => {
 
         :deep(.el-input__wrapper) {
             box-shadow: none;
-            padding: 0px;
+            padding: 0;
         }
     }
 

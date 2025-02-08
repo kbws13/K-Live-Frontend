@@ -6,10 +6,10 @@
     }">
         <el-image :lazy="lazy" :src="fileSource || fileImage" v-if="fileSource || fileImage" :fit="fit"
             @click="showViewerHandler">
-            <template #placeholder>
-                <img :src="Local.getLocalImage('playing.gif')" />
+            <template v-slot:placeholder>
+                <img :src="Local.getLocalImage('playing.gif')"  alt=""/>
             </template>
-            <template #error>
+            <template v-slot:error>
                 <img :src="Local.getLocalImage(img404)" class="el-image__inner" :style="{ 'object-fit': fit }" />
             </template>
         </el-image>
@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElImage, ElImageViewer } from 'element-plus';
 import { Resource } from '@/api/core/Url';
 import { imgaeThumbnailSuffix } from '@/constant/ResourceConstant';
 import Local from '@/utils/Local';
@@ -34,14 +35,14 @@ const props = defineProps({
         type: Number,
     },
     fit: {
-        type: String,
-        default: 'scale-down'
+      type: String as () => 'fill' | 'contain' | 'cover' | 'none' | 'scale-down' | '',
+      default: 'scale-down'
     },
     preview: {
         type: Boolean,
         default: false,
     },
-    deaultImage: {
+    defaultImage: {
         type: String,
     },
     img404: {
@@ -65,12 +66,12 @@ const props = defineProps({
 
 const fileImage = ref();
 const fileSource = computed(() => {
-    if (!props.src && !props.deaultImage) {
+    if (!props.src && !props.defaultImage) {
         fileImage.value = null;
         return null;
     }
-    if (!props.src && props.deaultImage) {
-        return Local.getLocalImage(props.deaultImage);
+    if (!props.src && props.defaultImage) {
+        return Local.getLocalImage(props.defaultImage);
     }
     if (props.src instanceof File) {
         let img = new FileReader();
@@ -143,7 +144,7 @@ onMounted(() => {
     }
 
     .icon-image-error {
-        margin: 0px auto;
+        margin: 0 auto;
         font-size: 20px;
         color: #838383;
         height: 100%;

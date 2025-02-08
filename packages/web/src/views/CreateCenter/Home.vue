@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElCard } from 'element-plus';
 import { StatisticService } from "@/api/services/StatisticService";
 import * as echarts from "echarts";
 import { nextTick, ref, shallowRef } from "vue";

@@ -59,6 +59,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElDropdown, ElDropdownItem, ElDropdownMenu } from 'element-plus';
 import { doUserAction } from '@/api';
 import Avatar from '@/components/Avatar.vue';
 import Cover from '@/components/Cover.vue';

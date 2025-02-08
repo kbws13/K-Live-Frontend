@@ -39,7 +39,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-
+import { ElTable, ElTableColumn, ElPagination } from 'element-plus';
 
 const emit = defineEmits(["rowSelected", "rowClick"]);
 const props = defineProps({
@@ -59,7 +59,10 @@ const props = defineProps({
         default: 70,
     },
     columns: Array,
-    fetch: Function, // 获取数据的函数
+    fetch: {
+      type: Function,
+      required: true,
+    }, // 获取数据的函数
     initFetch: {
         type: Boolean,
         default: true,

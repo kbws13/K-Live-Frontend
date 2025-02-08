@@ -1,5 +1,5 @@
 <template>
-    <div v-if="dataSource.list != null && dataSource!.list.length == 0">
+    <div v-if="dataSource?.list != null && dataSource!.list.length == 0">
         <NoData msg="空空如也" />
     </div>
     <div class="data-list" :style="{ 'grid-template-columns': `repeat(${gridCount}, 1fr)` }">
@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElPagination } from 'element-plus';
 const props = defineProps({
   gridCount: {
     type: Number,
@@ -43,7 +44,7 @@ const handlePageNoChange = (pageNo: number) => {
 }
 .pagination {
   margin-top: 20px;
-  padding: 10px 0px 5px 0px;
+  padding: 10px 0 5px 0;
   text-align: center;
   overflow: hidden;
   height: 50px;

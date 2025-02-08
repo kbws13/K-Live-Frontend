@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElSwitch, ElScrollbar } from 'element-plus';
 import type { VideoFile } from '@/api/models/response/Video/VideoFile';
 import { VideoService } from '@/api/services/VideoService';
 import { mitter } from '@/event/eventBus';

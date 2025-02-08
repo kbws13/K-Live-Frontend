@@ -27,6 +27,6 @@ const change = () => {
   background: #f1f2f3;
   border-radius: 5px;
   height: 44px;
-  padding: 0px 20px;
+  padding: 0 20px;
 }
 </style>

@@ -24,7 +24,7 @@ instance.interceptors.request.use(
     (config) => {
         return config;
     },
-    (error) => {
+    () => {
         Message.error("请求发送失败");
         return Promise.reject("请求发送失败");
     }

@@ -3,9 +3,7 @@
         <div class="menu">
             <el-popover :width="categoryPartCount * (150 + 21) + 24" trigger="hover" :show-arrow="false" :offset="22"
                 placement="bottom-start">
-                <template #reference>
-                    <router-link class="iconfont icon-logo menu-item" to="/">首页</router-link>
-                </template>
+              <router-link class="iconfont icon-logo menu-item" to="/">首页</router-link>
                 <div class="nav-list">
                     <div class="nav-part" v-for="index in categoryPartCount">
                         <router-link class="nav-item" v-for="item in categoryStore.categoryList.slice(
@@ -13,7 +11,7 @@
                             (index - 1) * partCount + partCount
                         )" :to="`/v/${item.code}`">
                             <span class="icon" v-if="item.icon">
-                                <img :src="`${Resource.getResource}${item.icon}`" />
+                                <img :src="`${Resource.getResource}${item.icon}`"  alt=""/>
                             </span>
                             <span class="category-name">{{ item.name }}</span>
                         </router-link>
@@ -95,6 +93,7 @@
     </div>
 </template>
 <script lang="ts" setup>
+import { ElBadge, ElButton, ElPopover } from 'element-plus';
 import { UserService } from '@/api';
 import { Resource } from '@/api/core/Url';
 import type { UserVO } from '@/api/models/response/User/UserVO';
@@ -103,10 +102,10 @@ import { useCategoryStore } from '@/stores/CategoryStore';
 import { userLoginStore } from '@/stores/UserStore';
 import Message from '@/utils/Message';
 import { computed, getCurrentInstance, onMounted, onUnmounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 
-const prop = defineProps({
+defineProps({
     theme: {
         type: String,
         default: 'light'
@@ -116,7 +115,6 @@ const prop = defineProps({
 // @ts-ignore
 const { proxy } = getCurrentInstance();
 const route = useRoute();
-const router = useRouter();
 const loginStore = userLoginStore();
 const categoryStore = useCategoryStore();
 
@@ -330,8 +328,7 @@ onUnmounted(() => {
 
                 .item {
                     font-size: 14px;
-                    display: block;
-                    text-align: left;
+                  text-align: left;
                     line-height: 40px;
                     color: var(--text3);
                     padding: 0 20px;

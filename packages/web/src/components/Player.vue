@@ -8,7 +8,7 @@
             <div id="danmu" v-show="showDanmu"></div>
             <div v-show="!showDanmu" class="close-danmu">已关闭弹幕</div>
         </div>
-        <div id="play"><img :src="Local.getLocalImage('play.png')" /></div>
+        <div id="play"><img :src="Local.getLocalImage('play.png')"  alt=""/></div>
     </div>
 </template>
 
@@ -30,7 +30,7 @@ import { VideoService } from '@/api/services/VideoService';
 
 const loginStore = userLoginStore();
 const route = useRoute()
-const props = defineProps({
+defineProps({
     fileId: {
         type: String,
         default: '',
@@ -153,7 +153,7 @@ const initPlayer = () => {
         player.template.$bottom.style.display = display
     })
     //视频播放完成
-    player.on('video:ended', (e) => {
+    player.on('video:ended', () => {
         mitter.emit('playEnd')
     })
 }
@@ -218,6 +218,7 @@ onMounted(() => {
         //滚动条的宽度是8，页面未全部加载完获取不到滚动条的宽度，所以这里提前减去滚动条的宽度
         const height = Math.round((playerRef.value.clientWidth - 8) * 0.5625)
         playerHeight.value = height
+        // @ts-ignore
         setPlayerHeight(height)
     })
 
@@ -275,7 +276,9 @@ const cleanTimer = () => {
 const videoInfo = inject('videoInfo')
 const showDanmu = computed(() => {
     return (
+        // @ts-ignore
         videoInfo.value.interaction == null ||
+        // @ts-ignore
         videoInfo.value.interaction.indexOf('0') === -1
     )
 })

@@ -4,9 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import BasicLayout from "@/layout/BasicLayout.vue";
 import { onBeforeMount, onMounted } from "vue";
-import { useRoute } from "vue-router";
 import VueCookies from 'vue-cookies'
 import { UserService } from "./api";
 import { userLoginStore } from "./stores/UserStore";
@@ -17,7 +15,6 @@ import type { Category } from "./api/models/response/Category/Category";
 import { CategoryService } from "./api/services/CategoryService";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
-const route = useRoute();
 const loginStore = userLoginStore();
 const systemSettingStore = useSystemSettingStore();
 const categoryStore = useCategoryStore();

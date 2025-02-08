@@ -6,7 +6,7 @@
         </template>
     </div>
     <div class="bottom-loading" v-if="loading">
-        <img :src="proxy.Utils.getLocalImage('playing.gif')" />数据加载中....
+        <img :src="proxy.Utils.getLocalImage('playing.gif')"  alt=""/>数据加载中....
     </div>
     <div v-if="
         props.dataSource!.pageNo >= props.dataSource!.pageTotal &&

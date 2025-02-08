@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElButton } from 'element-plus';
 import { UserService } from '@/api';
 import type { UserVO } from '@/api/models/response/User/UserVO';
 import type { Video } from '@/api/models/response/Video/Video';
@@ -126,7 +127,7 @@ const getVideoInfo = async () => {
     return;
   }
   //获取用户信息
-  getUserInfo(result.video.userId);
+  await getUserInfo(result.video.userId);
 
   //处理详情数据
   const resultData = result.video;

@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElScrollbar } from 'element-plus';
 import type { Danmu } from '@/api/models/response/Danmu/Danmu'
 import { mitter } from '@/event/eventBus'
 import { getCurrentInstance, onMounted, onUnmounted, ref } from 'vue'

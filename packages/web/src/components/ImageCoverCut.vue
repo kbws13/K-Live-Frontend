@@ -4,11 +4,11 @@
     <div class="cut-image-panel">
       <VueCropper ref="cropperRef" class="cropper" :img="sourceImage" outputType="png" :autoCrop="true"
         :autoCropWidth="props.cutWidth" :autoCropHeight="Math.round(props.cutWidth * props.scale)" :fixed="true"
-        :fixedNumber="[1, props.scale]" :centerBox="true" :full="false" :fixedBox="true" @realTime="prview" mode="100%">
+        :fixedNumber="[1, props.scale]" :centerBox="true" :full="false" :fixedBox="true" @realTime="preview" mode="100%">
       </VueCropper>
       <div class="preview-panel">
         <div class="preview-image">
-          <img :src="previewsImage" />
+          <img :src="previewsImage"  alt=""/>
         </div>
         <el-upload :multiple="false" :show-file-list="false" :http-request="selectFile" :accept="proxy.imageAccept">
           <el-button class="select-btn" type="primary" @click="">选择图片</el-button>
@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElUpload, ElButton } from 'element-plus';
 import Message from '@/utils/Message';
 import { getCurrentInstance, inject, nextTick, ref } from 'vue';
 import { VueCropper } from 'vue-cropper'
@@ -73,7 +74,7 @@ const dialogConfig = ref({
     {
       type: 'primary',
       text: '确定',
-      click: (e: any) => {
+      click: () => {
         cutImage()
       },
     },
@@ -81,23 +82,32 @@ const dialogConfig = ref({
 })
 
 const cropperRef = ref()
-const previewsImage = ref()
-const prview = (data) => {
-  cropperRef.value.getCropData((data) => {
+const previewsImage = ref<string>()
+
+const preview = () => {
+  cropperRef.value.getCropData((data: any) => {
     previewsImage.value = data
   })
 }
 
 const sourceImage = ref()
-const selectFile = (file) => {
-  console.log(props.cutWidth, props.scale)
+const selectFile = (file: any) => {
+  return new Promise((reject) => {
+    console.log(props.cutWidth, props.scale);
 
-  file = file.file
-  let img = new FileReader()
-  img.readAsDataURL(file)
-  img.onload = ({ target }) => {
-    sourceImage.value = target.result
-  }
+    file = file.file;
+    let img = new FileReader();
+
+    img.readAsDataURL(file);
+
+    img.onload = ({ target }) => {
+      sourceImage.value = target?.result; // 处理图片数据
+    };
+
+    img.onerror = (error) => {
+      reject(error); // 处理错误
+    };
+  });
 }
 
 const show = () => {
@@ -133,7 +143,7 @@ const cutImage = () => {
     )
     return
   }
-  cropperRef.value.getCropBlob((blob) => {
+  cropperRef.value.getCropBlob((blob: Blob) => {
     const file = new File(
       [blob],
       'temp.' + blob.type.substring(blob.type.indexOf('/') + 1),
@@ -141,6 +151,7 @@ const cutImage = () => {
     )
     dialogConfig.value.show = false
 
+    // @ts-ignore
     cutImageCallback({
       coverImage: file,
     })

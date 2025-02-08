@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus';
 import { userLoginStore } from '@/stores/UserStore';
 import LoginView from '@/views/User/LoginView.vue';
 import { ref, watch } from 'vue';
@@ -91,7 +92,7 @@ init()
 
 watch(
     () => route,
-    (newVal, oldVal) => {
+    () => {
         defaultActive.value = route.path
     },
     { immediate: true, deep: true }

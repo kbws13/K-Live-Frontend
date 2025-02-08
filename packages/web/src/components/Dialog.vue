@@ -9,7 +9,7 @@
         :width="width"
         @close="close"
     >
-        <template #header="{ close, titleId, titleClass }">
+        <template header="{ close, titleId, titleClass }">
             <div v-if="title" class="title">
                 {{ title }}
             </div>
@@ -18,7 +18,7 @@
         <div class="dialog-body" :style="{ 'max-height': maxHeight + 'px', padding: padding + 'px'}">
             <slot></slot>
         </div>
-        <template v-if="buttons && buttons.length > 0" || showCancel>
+        <template v-if="hasButton">
             <div class="dialog-footer">
                 <el-button link @click="close" v-if="showCancel">取消</el-button>
                 <el-button v-for="btn in buttons" :type="btn.type || 'primary'" @click="btn.click">{{ btn.text }}</el-button>
@@ -28,7 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-
+import { ElDialog, ElButton } from 'element-plus';
+import { computed } from "vue";
 const props = defineProps({
     draggable: {
         type: Boolean,
@@ -66,6 +67,10 @@ const props = defineProps({
     }
 })
 
+const hasButton = computed(() => {
+  return (props.buttons && props.buttons.length > 0) || props.showCancel;
+});
+
 const maxHeight = window.innerHeight - props.top - 120;
 const emit = defineEmits();
 
@@ -76,7 +81,7 @@ const close = () => {
 
 <style lang="scss">
 .cust-dialog {
-    padding: 0px !important;
+    padding: 0 !important;
     margin-bottom: 5px !important;
     .el-dialog__header {
         padding: 16px;

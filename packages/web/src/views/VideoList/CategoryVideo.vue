@@ -56,11 +56,7 @@ let initScrollTop = 0
 //是否向下关东
 let scrollDown = true
 const scrollHandler = (curScrollTop: number) => {
-  if (curScrollTop - initScrollTop > 0) {
-    scrollDown = true
-  } else {
-    scrollDown = false
-  }
+  scrollDown = curScrollTop - initScrollTop > 0;
   initScrollTop = curScrollTop
 
   if (curScrollTop >= categoryTopDistance.value) {

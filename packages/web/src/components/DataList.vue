@@ -1,5 +1,5 @@
 <template>
-    <div v-if="dataSource.list != null && dataSource!.list.length == 0">
+    <div v-if="dataSource?.list != null && dataSource!.list.length == 0">
         <NoData msg="空空如也" />
     </div>
     <div class="data-list-panel">
@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElPagination } from 'element-plus';
 const props = defineProps({
   dataSource: {
     type: Object,
@@ -38,7 +39,7 @@ const handlePageNoChange = (pageNo: number) => {
   overflow: auto;
 }
 .pagination {
-  padding: 10px 0px 5px 0px;
+  padding: 10px 0 5px 0;
   text-align: right;
   overflow: hidden;
   height: 50px;

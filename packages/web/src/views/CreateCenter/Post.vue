@@ -52,6 +52,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElForm, ElFormItem, ElCheckboxGroup, ElCheckbox, ElInput, ElButton, ElCascader, ElRadio, ElRadioGroup } from 'element-plus';
 import { uploadImage } from '@/api';
 import { CreateCenterService } from '@/api/services/CreateCenterService';
 import { mitter } from '@/event/eventBus';
@@ -61,14 +62,29 @@ import { useRoute, useRouter } from 'vue-router';
 import TagInput from './components/TagInput.vue';
 import { useCategoryStore } from '@/stores/CategoryStore';
 import VideoUploader from './components/VideoUploader.vue';
+import type {VideoPostAddRequest} from "@/api/models/request/CreateCenter/VideoPostAddRequest";
+import type { Category } from "@/api/models/response/Category/Category";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const formData = ref({
+  cover: "",
   tags: [],
-})
+  name: '',
+  parentCategoryId: 0,
+  originInfo: "",
+  categoryId: 0,
+  postType: 0,
+  introduction: '',
+  interaction: '',
+  videoFilePosts: [],
+  interactionArray: [],
+  categoryArray: [] as Category[],
+});
+
+
 const categoryStore = useCategoryStore()
 const formDataRef = ref()
 const startUpload = ref(false)
@@ -83,11 +99,10 @@ const rules = {
   tags: [{ required: true, message: '标签不能为空' }],
 }
 
-provide('cutImageCallback', ({ coverImage }) => {
+provide('cutImageCallback', ({ coverImage }: {coverImage: string}) => {
   formData.value.cover = coverImage
 })
-
-mitter.on('startUpload', (fileName) => {
+mitter.on('startUpload', (fileName: string) => {
   startUpload.value = true
   nextTick(() => {
     formDataRef.value.resetFields()
@@ -102,16 +117,16 @@ const submitForm = () => {
   if (!uploadFileList) {
     return
   }
-  formDataRef.value.validate(async (valid) => {
+  formDataRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       return
     }
-    let params = {
+    let params: Partial<VideoPostAddRequest> = {
       videoFilePosts: uploadFileList,
     }
     Object.assign(params, formData.value)
     //处理分裂
-    params.parentCategoryId = params.categoryArray[0]
+    params.parentCategoryId = formData.value.categoryArray[0]
     if (params.categoryArray.length > 1) {
       params.categoryId = params.categoryArray[1]
     }
@@ -133,7 +148,7 @@ const submitForm = () => {
     }
     await CreateCenterService.addPostVideo(params);
     Message.success('发布成功')
-    router.push('/createCenter/video')
+    await router.push('/createCenter/video')
   })
 }
 

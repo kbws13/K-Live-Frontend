@@ -85,11 +85,12 @@
 </template>
 
 <script lang="ts" setup>
+import { ElPopover } from 'element-plus';
 import { useCategoryStore } from '@/stores/CategoryStore';
 import { computed, getCurrentInstance } from 'vue';
 import { useRoute } from 'vue-router';
 
-const props = defineProps({
+defineProps({
     showType: {
         type: Number,
         default: 0,
@@ -150,7 +151,7 @@ const showItemCount = computed(() => {
 
         .category-item {
             line-height: 30px;
-            padding: 0px 5px;
+            padding: 0 5px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

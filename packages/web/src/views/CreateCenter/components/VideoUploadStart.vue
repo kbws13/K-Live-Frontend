@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElPopover, ElUpload } from 'element-plus';
 import { mitter } from '@/event/eventBus';
 import { useSystemSettingStore } from '@/stores/SystemSettingStore';
 import Local from '@/utils/Local';

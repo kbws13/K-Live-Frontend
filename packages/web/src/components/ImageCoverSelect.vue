@@ -11,9 +11,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Resource } from '@/api/core/Url'
-import { getCurrentInstance, ref } from 'vue'
-import { asyncComputed } from '@vueuse/core'
+import {ElImage} from 'element-plus';
+import {Resource} from '@/api/core/Url'
+import {getCurrentInstance, ref} from 'vue'
+import {asyncComputed} from '@vueuse/core'
 import ImageCoverCut from './ImageCoverCut.vue'
 
 // @ts-ignore
@@ -44,17 +45,16 @@ const coverFile = asyncComputed(async () => {
   if (typeof props.coverImage == 'string') {
     return Resource.getResource + props.coverImage
   } else if (props.coverImage instanceof File) {
-    const base64 = await convertFile2Base64(proxy.coverImage)
-    return base64
+    return await convertFile2Base64(proxy.coverImage)
   }
 })
 
-const convertFile2Base64 = (file) => {
-  return new Promise((resolve, reject) => {
+const convertFile2Base64 = (file: File): Promise<string> => {
+  return new Promise((resolve) => {
     let img = new FileReader()
     img.readAsDataURL(file)
     img.onload = ({ target }) => {
-      resolve(target.result)
+      resolve(target?.result as string)
     }
   })
 }

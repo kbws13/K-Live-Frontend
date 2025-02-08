@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import Local from '@/utils/Local';
 
-const props = defineProps({
+defineProps({
     //数据
     data: {
         type: Object,
@@ -122,8 +122,7 @@ const props = defineProps({
             -webkit-box-orient: vertical;
             text-overflow: -o-ellipsis-lastline;
             text-overflow: ellipsis;
-            word-break: break-word !important;
-            word-break: break-all;
+          word-break: break-all;
             line-break: anywhere;
             -webkit-line-clamp: 2;
             cursor: pointer;

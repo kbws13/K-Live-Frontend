@@ -1,7 +1,7 @@
 <template>
     <Dialog :show="dialogConfig.show" :buttons="dialogConfig.buttons" width="400px" :showCancel="false" :top="200"
         @close="dialogConfig.show = false">
-        <div class="cion-panel">
+        <div class="coin-panel">
             <div class="title-info">给UP主投上 <span class="coin-count">{{ coinCount }}</span> 枚硬币</div>
             <div class="coin-list">
                 <div :class="['coin-item', coinCount == 1 ? 'acitve' : '']" @click="setCoinCount(1)">
@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElButton } from 'element-plus';
 import { doUserAction } from '@/api'
 import type { Video } from '@/api/models/response/Video/Video'
 import { ACTION_TYPE } from '@/constant/ActionConstants'

@@ -13,7 +13,7 @@
 import { ref } from 'vue';
 
 const defaultAvatar = ref("user.png");
-const props = defineProps({
+defineProps({
     userId: {
         type: String,
         default: ''

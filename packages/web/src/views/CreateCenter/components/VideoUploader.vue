@@ -59,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElProgress, ElUpload, ElButton } from 'element-plus';
 import { useSystemSettingStore } from '@/stores/SystemSettingStore';
 import VideoUploadStart from './VideoUploadStart.vue';
 import { getCurrentInstance, nextTick, onUnmounted, ref } from 'vue';
@@ -67,7 +68,7 @@ import { FileService } from '@/api/services/FileService';
 import Local from '@/utils/Local';
 import { vDraggable } from 'vue-draggable-plus'
 
-const props = defineProps({
+defineProps({
     videoList: {
         type: Array,
         default: [],
@@ -75,20 +76,20 @@ const props = defineProps({
 })
 const systemSettingStore = useSystemSettingStore();
 const STATUS = {
-    emptyfile: {
-        value: 'emptyfile',
+    emptyFile: {
+        value: 'emptyFile',
         desc: '文件为空',
         color: '#F75000',
         icon: 'error',
     },
-    largefile: {
-        value: 'largefile',
+    largeFile: {
+        value: 'largeFile',
         desc: '文件超过大小' + systemSettingStore.sysSetting.videoSize + 'MB',
         color: '#F75000',
         icon: 'error',
     },
-    wating: {
-        value: 'wating',
+    waiting: {
+        value: 'waiting',
         desc: '等待上传',
         color: '#e6a23c',
         icon: 'wating',

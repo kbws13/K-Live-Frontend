@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElTabs, ElTabPane, ElUpload, ElForm, ElFormItem, ElPopover, ElInput, ElButton } from 'element-plus';
 import emojiList from '@/utils/Emoji.js'
 import { mitter } from '@/event/eventBus';
 import { userLoginStore } from '@/stores/UserStore';
@@ -64,7 +65,6 @@ import Message from '@/utils/Message';
 import { getCurrentInstance, inject, onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { CommentService } from '@/api/services/CommentService';
-import type { CommentAddRequest } from '@/api/models/request/VideoComment/CommentAddRequest';
 import { uploadImage } from '@/api';
 
 const loginStore = userLoginStore();

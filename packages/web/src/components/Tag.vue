@@ -12,9 +12,10 @@ const TYPE = {
     },
 }
 
-const props = defineProps({
+defineProps({
     type: {
         type: Number,
+        required: true,
     },
 })
 </script>
