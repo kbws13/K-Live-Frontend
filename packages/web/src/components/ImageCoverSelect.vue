@@ -65,4 +65,23 @@ const selectImage = async () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.cover {
+  width: 170px;
+  background: #f0f0f0;
+  position: relative;
+  .mask {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0.8;
+    z-index: 1;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+</style>

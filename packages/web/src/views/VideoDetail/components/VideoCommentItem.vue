@@ -17,7 +17,7 @@
                 <span v-html="convertContent(data.content)"></span>
             </div>
             <div v-if="data.imgPath" class="image-show">
-                <Cover :source="data.imgPath + imgaeThumbnailSuffix" :preview="true" fit="cover"></Cover>
+                <Cover :source="data.imgPath + imageThumbnailSuffix" :preview="true" fit="cover"></Cover>
             </div>
             <div class="comment-op">
                 <div class="op-left">
@@ -69,7 +69,7 @@ import { mitter } from '@/event/eventBus';
 import { userLoginStore } from '@/stores/UserStore';
 import { inject, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
-import { imgaeThumbnailSuffix } from '@/constant/ResourceConstant';
+import { imageThumbnailSuffix } from '@/constant/ResourceConstant';
 import Confirm from '@/utils/Confirm';
 import { CommentService } from '@/api/services/CommentService';
 import VideoCommentSend from './VideoCommentSend.vue';

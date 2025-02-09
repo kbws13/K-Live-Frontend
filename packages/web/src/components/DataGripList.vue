@@ -1,28 +1,30 @@
 <template>
-    <div v-if="dataSource?.list != null && dataSource!.list.length == 0">
+    <div v-if="dataSource?.records != null && dataSource!.records.length == 0">
         <NoData msg="空空如也" />
     </div>
     <div class="data-list" :style="{ 'grid-template-columns': `repeat(${gridCount}, 1fr)` }">
-        <template v-for="item in dataSource!.list">
+        <template v-for="item in dataSource!.records">
             <slot :data="item"></slot>
         </template>
     </div>
-    <div class="pagination" v-if="showPagination && dataSource!.pageTotal > 1">
-        <el-pagination v-if="dataSource!.pageTotal > 1" background :total="dataSource!.totalCount"
-            :current-page.sync="dataSource!.pageNo" layout="prev, pager, next" @current-change="handlePageNoChange"
-            :page-size="dataSource!.pageSize"></el-pagination>
+    <div class="pagination" v-if="showPagination && dataSource!.total > 1">
+        <el-pagination v-if="dataSource!.total > 1" background :total="dataSource!.total"
+            :current-page.sync="dataSource!.current" layout="prev, pager, next" @current-change="handlePageNoChange"
+            :page-size="dataSource!.size"></el-pagination>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ElPagination } from 'element-plus';
+import type {Page} from "@/common/Page";
+import type {PropType} from "vue";
 const props = defineProps({
   gridCount: {
     type: Number,
     default: 5,
   },
   dataSource: {
-    type: Object,
+    type: Object as PropType<Page<any>>,
   },
   showPagination: {
     type: Boolean,
@@ -32,7 +34,7 @@ const props = defineProps({
 
 const emit = defineEmits(["loadData"]);
 const handlePageNoChange = (pageNo: number) => {
-  props.dataSource!.pageNo = pageNo;
+  props.dataSource!.current = pageNo;
   emit("loadData");
 };
 </script>

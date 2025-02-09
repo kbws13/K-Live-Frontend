@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { ElImage, ElImageViewer } from 'element-plus';
 import { Resource } from '@/api/core/Url';
-import { imgaeThumbnailSuffix } from '@/constant/ResourceConstant';
+import { imageThumbnailSuffix } from '@/constant/ResourceConstant';
 import Local from '@/utils/Local';
 import { computed, onMounted, ref } from 'vue';
 
@@ -94,7 +94,7 @@ const imageList = computed(() => {
     if (props.src instanceof File) {
         return;
     }
-    const sourceImage = Resource.getResource + props.src!.replace(imgaeThumbnailSuffix, '');
+    const sourceImage = Resource.getResource + props.src!.replace(imageThumbnailSuffix, '');
     return [sourceImage];
 })
 

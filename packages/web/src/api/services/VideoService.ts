@@ -4,6 +4,8 @@ import type { VideoReportRequest } from "../models/request/Video/VideoReportRequ
 import type { Video } from "../models/response/Video/Video";
 import type { VideoFile } from "../models/response/Video/VideoFile";
 import type { VideoInfoResultVO } from "../models/response/Video/VideoInfoResultVO";
+import type {VideoQueryRequest} from "@/api/models/request/Video/VideoQueryRequest";
+import type {Page} from "@/common/Page";
 
 export class VideoService {
     /**
@@ -51,6 +53,10 @@ export class VideoService {
         })
     }
 
+    /**
+     * 获取视频分集列表
+     * @param videoId 视频 id
+     */
     public static async loadVideoPList(videoId: string): Promise<VideoFile[]> {
         return await request<VideoFile[]>({
             url: Web.loadVideoPList,
@@ -59,6 +65,38 @@ export class VideoService {
                 videoId: videoId
             },
             dataType: "url"
+        })
+    }
+
+    /**
+     * 获取热门播放视频
+     * @param videoQueryRequest
+     */
+    public static async loadHotVideoList(videoQueryRequest: VideoQueryRequest): Promise<Page<Video>> {
+        return request<Page<Video>>({
+            url: Web.loadHotVideoList,
+            method: "POST",
+            body: videoQueryRequest,
+            dataType: "json",
+        })
+    }
+
+    /**
+     * 搜索视频
+     * @param keyword
+     * @param orderType
+     * @param current
+     */
+    public static async searchVideo(keyword: string, orderType: number, current: number): Promise<Page<Video>> {
+        return request<Page<Video>>({
+            url: Web.searchVideo,
+            method: "GET",
+            body: {
+                keyword: keyword,
+                orderType: orderType,
+                current: current,
+            },
+            dataType: "url",
         })
     }
 }

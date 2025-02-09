@@ -9,7 +9,7 @@
         <el-carousel-item v-for="(item, index) in carouselVideoList" :key="item" :name="index + ''">
           <div class="roll-image">
             <router-link :to="`/video/${carouselVideoList[carouselIndex].id}`" target="_blank">
-              <img :src="`${Resource.getResource}${item.cover}`" />
+              <img :src="`${Resource.getResource}${item.cover}`"  alt=""/>
             </router-link>
           </div>
         </el-carousel-item>
@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElCarousel, ElCarouselItem } from 'element-plus';
 import { Resource } from '@/api/core/Url';
 import type { Video } from '@/api/models/response/Video/Video';
 import { VideoService } from '@/api/services/VideoService';
@@ -94,7 +95,7 @@ const loadRecommendVideo = async () => {
     carouselVideoList.value = res
   }
 }
-// loadRecommendVideo()
+loadRecommendVideo()
 
 const carouselIndex = ref<number>(0)
 const carouselChange = (e: number) => {
@@ -142,7 +143,7 @@ const setCarousel = (index: number) => {
 
     .carousel-bottom {
       position: absolute;
-      bottom: 0px;
+      bottom: 0;
       width: 100%;
       height: 65px;
       background: rgba(0, 0, 0, 0.6);

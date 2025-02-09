@@ -1,6 +1,6 @@
 export type Action = {
     id: number,
-    videoId: number,
+    videoId: string,
     videoUserId: string,
     commentId: number,
     actionType: number,
