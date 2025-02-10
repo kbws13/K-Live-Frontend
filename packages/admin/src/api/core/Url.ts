@@ -79,5 +79,13 @@ export const Web = {
     getVideoStatusCount: "/web/createCenter/getVideoStatusCount",
     // 系统设置
     getSystemSetting: "/web/systemSetting/getSystemSetting",
+}
 
+export const Admin = {
+    // 分类
+    queryCategory: "/admin/category/queryCategory",
+    addCategory: "/admin/category/addCategory",
+    updateCategory: "/admin/category/updateCategory",
+    deleteCategory: "/admin/category/deleteCategory",
+    changeSortCategory: "/admin/category/changeSortCategory",
 }
