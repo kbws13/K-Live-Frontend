@@ -5,14 +5,15 @@ import type {CategoryAddRequest} from "@/api/models/request/Category/CategoryAdd
 import type {CategoryUpdateRequest} from "@/api/models/request/Category/CategoryUpdateRequest";
 import type {DeleteRequest} from "@/common/DeleteRequest";
 import type {CategoryChangeSortRequest} from "@/api/models/request/Category/CategoryChangeSortRequest";
+import type {Category} from "@/api/models/response/Category/Category";
 
 export class CategoryService {
     /**
      * 查询分类
      * @param categoryQueryRequest
      */
-    public static async queryCategory(categoryQueryRequest: CategoryQueryRequest) {
-        return await request({
+    public static async queryCategory(categoryQueryRequest: CategoryQueryRequest): Promise<Category[]> {
+        return await request<Category[]>({
             url: Admin.queryCategory,
             method: "POST",
             body: categoryQueryRequest,

@@ -88,4 +88,10 @@ export const Admin = {
     updateCategory: "/admin/category/updateCategory",
     deleteCategory: "/admin/category/deleteCategory",
     changeSortCategory: "/admin/category/changeSortCategory",
+    // 视频
+    loadVideoPost: "/admin/video/loadVideoPost",
+    auditVideoPost: "/admin/video/auditVideoPost",
+    recommendVideo: "/admin/video/recommendVideo",
+    deleteVideo: "/admin/video/deleteVideo",
+    loadVideoPList: "/admin/video/loadVideoPList",
 }
