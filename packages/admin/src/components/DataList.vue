@@ -1,19 +1,19 @@
 <template>
-  <div v-if="dataSource?.list != null && dataSource?.list.length == 0">
+  <div v-if="dataSource?.records != null && dataSource?.records.length == 0">
     <NoData msg="空空如也"/>
   </div>
-  <template v-for="item in dataSource?.list">
+  <template v-for="item in dataSource?.records">
     <slot :data="item"></slot>
   </template>
-  <div class="pagination" v-if="showPagination && dataSource!.pageTotal > 1">
+  <div class="pagination" v-if="showPagination">
     <el-pagination
         v-if="dataSource!.pageTotal > 1"
         background
-        :total="dataSource!.totalCount"
-        :current-page.sync="dataSource!.pageNo"
+        :total="dataSource!.size"
+        :current-page.sync="dataSource!.current"
         layout="prev, pager, next"
         @current-change="handlePageNoChange"
-        :page-size="dataSource!.pageSize"
+        :page-size="dataSource!.size"
     ></el-pagination>
   </div>
 </template>

@@ -10,18 +10,13 @@
 </template>
 
 <script lang="ts" setup>
-import { Resource } from '@/api/core/Url';
-import { useLoginStore } from '@/stores/UserStore';
-import { onUnmounted, onBeforeUnmount, onMounted, ref } from 'vue';
+import {Resource} from '@/api/core/Url';
+import {onBeforeUnmount, onMounted, onUnmounted, ref} from 'vue';
 import Hls from 'hls.js'
 import Artplayer from 'artplayer'
-import { mitter } from '@/event/eventBus';
-import { useRoute } from 'vue-router';
-import { DanmuService } from '@/api/services/DanmuService';
-import type { Danmu } from '@/api/models/response/Danmu/Danmu';
+import {mitter} from '@/event/eventBus';
 
-const loginStore = useLoginStore();
-const route = useRoute()
+
 //https://artplayer.org/
 const props = defineProps({
   fileId: {
@@ -35,13 +30,8 @@ const props = defineProps({
 });
 
 const playerRef = ref();
-const options = {
-  url: Resource.videoResource,
-};
 
 let player: any = null;
-let currentTime = null;
-let startTime = null;
 
 const initPlayer = () => {
   //隐藏右键菜单
@@ -166,36 +156,6 @@ const changeWideScreen = () => {
     player.controls["narrow-screen"].style.display = "none";
   }
   emit("changeWideScreen", wideScreen.value);
-};
-
-const postDanmu = async (danmu: Danmu) => {
-  if (Object.keys(loginStore.userInfo).length === 0) {
-    loginStore.setLogin(true)
-    return
-  }
-  danmu.fileId = fileId.value
-  danmu.videoId = route.params.videoId[0]
-  danmu.time = Math.round(danmu.time)
-  await DanmuService.postDanmu({
-    videoId: danmu.videoId,
-    fileId: fileId.value,
-    text: danmu.text,
-    model: danmu.mode,
-    color: danmu.color,
-    time: danmu.time,
-  });
-};
-
-const loadDanmuList = async () => {
-  let result = await proxy.Request({
-    url: proxy.Api.loadDanmu,
-    params: { videoId: route.params.videoId },
-  });
-  if (!result) {
-    return [];
-  }
-  mitter.emit("loadDanmu", result.data);
-  return result.data;
 };
 
 const playerHeight = ref(500);

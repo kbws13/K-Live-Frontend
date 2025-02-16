@@ -21,14 +21,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ElForm, ElFormItem, ElInput } from "element-plus"
-import { ref, nextTick } from "vue"
+import {ElForm, ElFormItem, ElInput} from "element-plus"
+import {nextTick, ref} from "vue"
 import Message from "@/utils/Message";
 import {uploadImage} from "@/api";
 import ImageUpload from "@/components/ImageUpload.vue";
 import type {Category} from "@/api/models/response/Category/Category";
-import type {CategoryAddRequest} from "@/api/models/request/Category/CategoryAddRequest";
 import {CategoryService} from "@/api/services/CategoryService";
+
 const dialogConfig = ref({
   show: false,
   title: '新增分类',
@@ -74,7 +74,7 @@ const submitForm = async () => {
     if (!valid) {
       return
     }
-    let params = {} as CategoryAddRequest
+    let params = {} as any
     Object.assign(params, formData.value)
 
     //上传封面

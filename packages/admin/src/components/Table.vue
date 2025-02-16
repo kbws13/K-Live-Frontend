@@ -79,8 +79,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElTable, ElTableColumn, ElPagination } from 'element-plus';
+import {ref} from "vue";
+import {ElTable, ElTableColumn, ElPagination} from 'element-plus';
 
 const emit = defineEmits(["rowSelected", "rowClick"]);
 const props = defineProps({
@@ -142,7 +142,7 @@ const setCurrentRow = (rowKey, rowValue) => {
   dataTable.value.setCurrentRow(row);
 };
 //将子组件暴露出去，否则父组件无法调用
-defineExpose({ setCurrentRow, clearSelection });
+defineExpose({setCurrentRow, clearSelection});
 
 //行点击
 const handleRowClick = (row) => {
@@ -178,6 +178,7 @@ const selectedHandler = (row, index) => {
 .pagination {
   padding-top: 10px;
 }
+
 .el-pagination {
   justify-content: right;
 }

@@ -7,7 +7,7 @@
             <el-form-item label="视频名称">
               <el-input
                   class="password-input"
-                  v-model="searchForm.videoNameFuzzy"
+                  v-model="searchForm.videoName"
                   clearable
                   placeholder="支持模糊搜索"
                   @keyup.enter="loadDataList"
@@ -44,7 +44,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4" :style="{ paddingLeft: '10px' }">
-            <el-button type="success" @click="loadDataList()">查询 </el-button>
+            <el-button type="success" @click="loadDataList()">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -105,12 +105,12 @@
               @click.prevent="showDetail(row)"
           >详情</a
           >
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
           <template v-if="row.status == 2">
             <a class="a-link" href="javascript:void(0)" @click="audit(row)"
             >审核</a
             >
-            <el-divider direction="vertical" />
+            <el-divider direction="vertical"/>
           </template>
           <template v-if="row.status == 3">
             <a
@@ -119,7 +119,7 @@
                 @click="recommend(row)"
             >{{ row.recommendType == 1 ? "取消推荐" : "推荐" }}</a
             >
-            <el-divider direction="vertical" />
+            <el-divider direction="vertical"/>
           </template>
           <a
               class="a-link"
@@ -136,17 +136,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ElCard, ElDivider, ElForm, ElRow, ElCol, ElFormItem, ElInput, ElSelect, ElOption, ElCascader, ElButton } from "element-plus";
-import { ref } from "vue";
+import {
+  ElCard,
+  ElDivider,
+  ElForm,
+  ElRow,
+  ElCol,
+  ElFormItem,
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElCascader,
+  ElButton
+} from "element-plus";
+import {ref} from "vue";
 import VideoDetail from "@/views/Content/components/VideoDetail.vue";
 import VideoAudit from "@/views/Content/components/VideoAudit.vue";
 import Message from "@/utils/Message";
 import Confirm from "@/utils/Confirm";
 import Local from "web/src/utils/Local";
+import type {VideoPostQueryRequest} from "@/api/models/request/VideoPost/VideoPostQueryRequest";
 
-const searchForm = ref({});
+const searchForm = ref<VideoPostQueryRequest>({} as VideoPostQueryRequest);
 
-const tableData = ref({});
+const tableData = ref({} as any);
 const tableOptions = ref({
   extHeight: 0,
 });
@@ -200,7 +213,7 @@ const tableInfoRef = ref();
 
 const loadDataList = async () => {
   let params = {
-    pageNo: tableData.value.pageNo,
+    pageNo: tableData.value.current,
     pageSize: tableData.value.pageSize,
   };
   Object.assign(params, searchForm.value);
@@ -210,7 +223,6 @@ const loadDataList = async () => {
   } else if (params.categoryIdArray && params.categoryIdArray.length == 1) {
     params.pCategoryId = params.categoryIdArray[0];
   }
-  delete params.categoryIdArray;
   let result = await proxy.Request({
     url: proxy.Api.loadVideo,
     params: params,
@@ -291,10 +303,12 @@ const recommend = (data) => {
   overflow: auto;
   width: 100%;
 }
+
 .cover-info {
   min-width: 0;
   width: 160px;
   position: relative;
+
   .duration {
     position: absolute;
     right: 0;
@@ -307,23 +321,28 @@ const recommend = (data) => {
     font-size: 13px;
   }
 }
+
 .video-info {
   .user-name {
     margin-top: 5px;
     color: var(--text3);
     font-size: 14px;
+
     &::before {
       margin-right: 5px;
     }
   }
+
   .video-count {
     margin-top: 10px;
     color: var(--text3);
     display: flex;
     align-items: center;
+
     .iconfont {
       font-size: 14px;
       margin-right: 20px;
+
       &::before {
         font-size: 18px;
         margin-right: 5px;

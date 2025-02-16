@@ -25,7 +25,7 @@
             :src="Local.getLocalImage(img404)"
             class="el-image__inner"
             :style="{ 'object-fit': fit }"
-         alt=""/>
+            alt=""/>
       </template>
     </el-image>
     <div v-else class="no-image">请选择图片</div>
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ElImage, ElImageViewer } from 'element-plus';
+import {ElImage, ElImageViewer} from 'element-plus';
 import {
   ref,
   computed,
@@ -62,8 +62,8 @@ const props = defineProps({
     type: Number,
   },
   fit: {
-    type: String,
-    default: "scale-down",
+    type: String as () => 'fill' | 'contain' | 'cover' | 'none' | 'scale-down' | '',
+    default: 'scale-down'
   },
   preview: {
     type: Boolean,
@@ -104,11 +104,11 @@ const fileSource = computed(() => {
     let img = new FileReader();
     img.readAsDataURL(props.source);
     img.onload = ({target}) => {
-      fileImage.value = target.result;
+      fileImage.value = target?.result;
     };
 
   } else if (typeof props.source === "string") {
-    return `${Resource.getResource}${props.source}`;
+    return `/api${Resource.getResource}${props.source}`;
   }
 });
 
@@ -116,8 +116,11 @@ const imageList = computed(() => {
   if (!props.preview) {
     return [];
   }
+  if (props.source instanceof File) {
+    return;
+  }
   const sourceImg =
-      Resource.getResource + props.source.replace(imageThumbnailSuffix, "");
+      Resource.getResource + props.source!.replace(imageThumbnailSuffix, "");
   return [sourceImg];
 });
 

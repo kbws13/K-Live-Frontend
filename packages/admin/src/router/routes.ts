@@ -1,43 +1,56 @@
-import { type RouteRecordRaw } from "vue-router";
-import Index from "@/pages/Index.vue";
-import Login from "@/pages/Login.vue";
-import BaseLayout from "@/pages/layout/BaseLayout.vue";
-import Admin from "@/pages/Admin.vue";
-import Category from "@/pages/Category.vue";
+import {type RouteRecordRaw} from "vue-router";
 
 export const routes: Array<RouteRecordRaw> = [
     {
-        path: '/',
-        name: '首页',
-        component: Index,
-    },
-    {
         path: '/login', // 登录页
-        component: Login,
-        meta: {
-            title: '登录'
-        }
+        name: 'login',
+        component: () => import('@/views/Login/LoginView.vue'),
     },
     {
-        path: "/admin", // 后台首页
-        component: BaseLayout, // 对应 admin.vue 布局文件
-        // 使用到 admin.vue 布局的，都需要放置在其子路由下面
+        path: '/',
+        name: 'layout',
+        redirect: '/login',
+        component: () => import('@/layout/BasicLayout.vue'),
         children: [
             {
-                path: "/admin/index",
-                component: Admin, // 主内容区域，具体需要渲染的页面
-                meta: {
-                    title: '后台首页'
-                }
+                path: '/home',
+                name: '首页',
+                component: () => import('@/views/Home/HomeView.vue'),
             },
             {
-                path: '/admin/category/list',
-                component: Category,
-                meta: {
-                    title: '分类列表'
-                }
+                path: '/content/category',
+                name: '分类管理',
+                component: () => import('@/views/Content/CategoryListView.vue'),
+            },
+            {
+                path: '/content/video',
+                name: '稿件管理',
+                component: () => import('@/views/Content/VideoListView.vue'),
+            },
+            {
+                path: '/interact/comment',
+                name: '评论管理',
+                component: () => import('@/views/Interact/CommentListView.vue'),
+            },
+            {
+                path: '/interact/danmu',
+                name: '弹幕管理',
+                component: () => import('@/views/Interact/DanmuListView.vue'),
+            },
+            {
+                path: '/user/userList',
+                name: '用户管理',
+                component: () => import('@/views/User/UserListView.vue'),
+            },
+            {
+                path: '/setting',
+                name: '设置',
+                component: () => import('@/views/Setting/SettingView.vue'),
             }
         ]
-
-    }
+    },
+    {
+        path: '/:pathMatch(.*)',
+        component: import('@/views/Error/404.vue'),
+    },
 ]

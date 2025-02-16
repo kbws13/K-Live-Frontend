@@ -18,7 +18,7 @@ moment.locale('zh-cn', {
 });
 
 const getLocalImage = (image: string) => {
-    return new URL(`../assets/${image}`, import.meta.url).href;
+    return import.meta.resolve(`../assets/${image}`);
 }
 
 const formatDate = (timestamp: any) => {
