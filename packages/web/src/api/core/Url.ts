@@ -72,6 +72,7 @@ export const Web = {
     deleteHistory: "/web/history/deleteHistory",
     // 创作中心
     loadAllVideo: "/web/createCenter/loadAllVideo",
+    loadVideoPost: "/web/createCenter/loadVideoPost",
     addPostVideo: "/web/createCenter/addPostVideo",
     getVideoInfoById: "/web/createCenter/getVideoInfoById",
     loadCommentByVideoId: "/web/createCenter/loadCommentByVideoId",

@@ -1,20 +1,20 @@
 <template>
   <div class="video-item" ref="videoItemRef">
     <div class="video-cover">
-      <Cover :source="data.videoCover"></Cover>
+      <Cover :src="data.cover"></Cover>
       <div class="duration">
         {{ Local.convertSecondsToHMS(data.duration) }}
       </div>
     </div>
     <div class="video-info">
       <div class="video-name">
-        <span v-if="data.status != 3">{{ data.videoName }}</span>
+        <span v-if="data.status != 3">{{ data.name }}</span>
         <router-link
             v-else
-            :to="`/video/${data.videoId}`"
+            :to="`/video/${data.id}`"
             class="a-link"
             target="_blank"
-        >{{ data.videoName }}</router-link
+        >{{ data.name }}</router-link
         >
         <span
             v-if="data.status == 0 || data.status == 2"
@@ -137,7 +137,7 @@ const jumpUrl = {
   comment: "/createCenter/comment",
 };
 
-const jump = (type: any) => {
+const jump = (type: keyof typeof jumpUrl) => {
   router.push(`${jumpUrl[type]}?videoId=${props.data.videoId}`);
 };
 

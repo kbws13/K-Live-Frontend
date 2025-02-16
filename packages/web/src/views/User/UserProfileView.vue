@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import {inject} from "vue";
-import UserProfileVideoList from "@/views/User/components/UserProfileVideoList.vue";
+import UserProfileVideoList from "@/views/User/UserProfileVideoList.vue";
 import UserProfileSeries from "@/views/User/UserProfileSeries.vue";
 import type {UserVO} from "@/api/models/response/User/UserVO";
 

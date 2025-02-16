@@ -24,7 +24,7 @@ export class FileService {
         }
     }
 
-    public static async uploadVideo(chunkFile: File, chunkIndex: number, uploadId: string, 
+    public static async uploadVideo(chunkFile: Blob, chunkIndex: number, uploadId: string,
         errorCallback: Function, uploadProgressCallback: Function): Promise<boolean> {
         try {
             const response = await request<boolean>({

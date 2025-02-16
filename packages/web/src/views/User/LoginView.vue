@@ -8,9 +8,9 @@
             <el-form class="login-register" :model="formData" :rules="rules" ref="formDataRef" label-width="80px"
                 @submit.event>
                 <div class="tab-panel">
-                    <div :class="[opType == 0 ? 'active' : '']" @click="showPanle(0)">登录</div>
+                    <div :class="[opType == 0 ? 'active' : '']" @click="showPanel(0)">登录</div>
                     <el-divider direction="vertical"></el-divider>
-                    <div :class="[opType == 1 ? 'active' : '']" @click="showPanle(1)">注册</div>
+                    <div :class="[opType == 1 ? 'active' : '']" @click="showPanel(1)">注册</div>
                 </div>
                 <el-form-item prop="email">
                     <el-input clearable placeholder="请输入邮箱" v-model.trim="formData.email" size="large">
@@ -45,7 +45,7 @@
                     <el-form-item prop="checkCode">
                         <div class="check-code-panel">
                             <div class="input">
-                                <el-input placeholder="请输入验证码" v-model.trim="formData.password" size="large">
+                                <el-input placeholder="请输入验证码" v-model.trim="formData.checkCode" size="large">
                                     <template #prefix>
                                         <span class="iconfont icon-checkcode"></span>
                                     </template>
@@ -57,7 +57,7 @@
                 </div>
 
                 <el-form-item>
-                    <el-button type="primary" @click="submit" class="login-btn" size="large">
+                    <el-button type="primary" @click="submit(opType)" class="login-btn" size="large">
                         <span v-if="opType == 0">登录</span>
                         <span v-if="opType == 1">注册</span>
                     </el-button>
@@ -109,7 +109,7 @@ const rules = {
 
 const opType = ref(0)
 
-const showPanle = (type: number) => {
+const showPanel = (type: number) => {
     opType.value = type;
     if (loginStore.showLogin) {
         resetForm();
@@ -131,24 +131,37 @@ const resetForm = () => {
 }
 
 onMounted(() => {
-    showPanle(0);
+    showPanel(0);
 })
 
 onUpdated(() => {
-    showPanle(0);
+    showPanel(0);
 })
 
-const submit = async () => {
+const submit = async (type: number) => {
+  if (type === 0) {
     const data: UserLoginRequest = {
-        email: formData.value.email,
-        password: md5(formData.value.password)
+      email: formData.value.email,
+      password: md5(formData.value.password)
     }
     const res = await UserService.login(data)
     if (!res) return;
     Message.success('登录成功');
-    loginStore.setLogin(false);    
+    loginStore.setLogin(false);
     loginStore.saveUserInfo(res);
     proxy.VueCookies.set("token", res.token);
+  } else {
+    const data: UserLoginRequest = {
+      email: formData.value.email,
+      password: md5(formData.value.password)
+    }
+    const res = await UserService.login(data)
+    if (!res) return;
+    Message.success('登录成功');
+    loginStore.setLogin(false);
+    loginStore.saveUserInfo(res);
+    proxy.VueCookies.set("token", res.token);
+  }
 }
 
 </script>

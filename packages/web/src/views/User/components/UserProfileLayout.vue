@@ -14,7 +14,7 @@
       'max-width': proxy.bodyMaxWidth + 'px',
       'min-width': proxy.bodyMinWidth + 'px',
       'background-image': `url(${Local.getLocalImage(
-        'uhome-bg/' + (userInfo.theme || 0) + '.png'
+        'uhome-bg/' + (userInfo.theme || 1) + '.png'
       )})`,
     }"
   >

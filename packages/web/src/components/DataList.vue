@@ -1,16 +1,16 @@
 <template>
-    <div v-if="dataSource?.list != null && dataSource!.list.length == 0">
+    <div v-if="dataSource?.records != null && dataSource!.records.length == 0">
         <NoData msg="空空如也" />
     </div>
     <div class="data-list-panel">
-        <template v-for="item in dataSource!.list">
+        <template v-for="item in dataSource!.records">
             <slot :data="item"></slot>
         </template>
     </div>
-    <div class="pagination" v-if="showPagination && dataSource!.pageTotal > 1">
-        <el-pagination v-if="dataSource!.pageTotal > 1" background :total="dataSource!.totalCount"
-            :current-page.sync="dataSource!.pageNo" layout="prev, pager, next" @current-change="handlePageNoChange"
-            :page-size="dataSource!.pageSize"></el-pagination>
+    <div class="pagination" v-if="showPagination">
+        <el-pagination v-if="dataSource!.pageTotal > 1" background :total="dataSource!.size"
+            :current-page.sync="dataSource!.current" layout="prev, pager, next" @current-change="handlePageNoChange"
+            :page-size="dataSource!.size"></el-pagination>
     </div>
 </template>
 
@@ -28,7 +28,7 @@ const props = defineProps({
 
 const emit = defineEmits(['loadData'])
 const handlePageNoChange = (pageNo: number) => {
-  props.dataSource!.pageNo = pageNo
+  props.dataSource!.current = pageNo
   emit('loadData')
 }
 </script>

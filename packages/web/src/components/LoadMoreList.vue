@@ -6,7 +6,7 @@
         </template>
     </div>
     <div class="bottom-loading" v-if="loading">
-        <img :src="proxy.Utils.getLocalImage('playing.gif')"  alt=""/>数据加载中....
+        <img :src="Local.getLocalImage('playing.gif')"  alt=""/>数据加载中....
     </div>
     <div v-if="
         props.dataSource!.pageNo >= props.dataSource!.pageTotal &&
@@ -21,6 +21,7 @@
 <script lang="ts" setup>
 import { mitter } from '@/event/eventBus';
 import { getCurrentInstance, onMounted, onUnmounted } from 'vue';
+import Local from "@/utils/Local";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();

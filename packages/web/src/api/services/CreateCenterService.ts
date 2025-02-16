@@ -1,9 +1,12 @@
 import request from "../core/request";
 import {Web} from "../core/Url";
 import type {VideoPostAddRequest} from "../models/request/CreateCenter/VideoPostAddRequest";
-import type {VideoPostEditVO} from "../models/response/Video/VideoPostEditVO";
 import type {Video} from "@/api/models/response/Video/Video";
 import type {VideoStatusCountVO} from "@/api/models/response/CreateCenter/VideoStatusCountVO";
+import type {VideoPostEditVO} from "@/api/models/response/VideoPost/VideoPostEditVO";
+import type {VideoPostQueryRequest} from "@/api/models/request/VideoPost/VideoPostQueryRequest";
+import type {Page} from "@/common/Page";
+import type {VideoPostVO} from "@/api/models/response/VideoPost/VideoPostVO";
 
 export class CreateCenterService {
 
@@ -13,6 +16,19 @@ export class CreateCenterService {
             method: "GET",
             body: null,
             dataType: "url",
+        })
+    }
+
+    /**
+     * 查询稿件接口
+     * @param videoPostQueryRequest
+     */
+    public static async loadVideoPost(videoPostQueryRequest: VideoPostQueryRequest): Promise<Page<VideoPostVO>> {
+        return await request<Page<VideoPostVO>>({
+            url: Web.loadVideoPost,
+            method: "POST",
+            body: videoPostQueryRequest,
+            dataType: "json",
         })
     }
 

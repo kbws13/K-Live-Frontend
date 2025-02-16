@@ -28,8 +28,8 @@
       </div>
       <div class="video-status">
         <span
-            :class="['item', status == -1 ? 'active' : '']"
-            @click="statusLoad(-1)"
+            :class="['item', status == 2 ? 'active' : '']"
+            @click="statusLoad(2)"
         >进行中<span class="count-info">{{
             countInfo.inProcessCount
           }}</span></span
@@ -68,6 +68,7 @@ import VideoListItem from "@/views/CreateCenter/components/VideoListItem.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {CreateCenterService} from "@/api/services/CreateCenterService";
 import type {VideoStatusCountVO} from "@/api/models/response/CreateCenter/VideoStatusCountVO";
+import type {VideoPostQueryRequest} from "@/api/models/request/VideoPost/VideoPostQueryRequest";
 
 const videoNameFuzzy = ref();
 const status = ref();
@@ -80,16 +81,15 @@ const cleanStatusLoad = () => {
   loadVideoList();
 };
 
-const dataSource = ref({});
+const dataSource = ref({} as any);
 const loadVideoList = async () => {
-  // TODO 需要加查询功能
   let params = {
-    pageNo: dataSource.value.pageNo,
-    videoNameFuzzy: videoNameFuzzy.value,
+    current: dataSource.value.pageNo,
+    videoName: videoNameFuzzy.value,
     status: status.value,
-  };
+  } as VideoPostQueryRequest;
 
-  let result = await CreateCenterService.loadAllVideo();
+  let result = await CreateCenterService.loadVideoPost(params);
   if (!result) {
     return;
   }
@@ -131,4 +131,55 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.video-tab {
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  padding: 0 40px;
+  justify-content: space-between;
+  .tab {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--blue);
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--blue);
+  }
+  .search {
+    width: 200px;
+  }
+}
+.video-manage {
+  margin-top: 10px;
+  padding: 0 40px 10px 40px;
+  .top-info {
+    .count-info {
+      padding: 0 5px;
+    }
+    .all-video-panel {
+      display: flex;
+      .all-video {
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--blue);
+      }
+    }
+    .video-status {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      .item {
+        cursor: pointer;
+        font-size: 13px;
+        margin-right: 0;
+        color: var(--text2);
+        &:hover {
+          color: var(--blue);
+        }
+      }
+      .active {
+        color: var(--blue);
+      }
+    }
+  }
+}
 </style>
