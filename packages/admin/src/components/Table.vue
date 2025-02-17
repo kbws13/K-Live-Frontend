@@ -2,7 +2,7 @@
   <div>
     <el-table
         ref="dataTable"
-        :data="dataSource!.list || []"
+        :data="dataSource!.records || []"
         :height="tableHeight"
         :stripe="options.stripe"
         :border="options.border"
@@ -68,7 +68,7 @@
           :total="dataSource!.totalCount"
           :page-sizes="[15, 30, 50, 100]"
           :page-size="dataSource!.pageSize"
-          :current-page.sync="dataSource!.pageNo"
+          :current-page.sync="dataSource!.current"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handlePageSizeChange"
           @current-change="handlePageNoChange"

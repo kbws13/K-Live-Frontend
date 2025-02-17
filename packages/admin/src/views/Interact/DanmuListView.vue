@@ -45,6 +45,8 @@ import {ref, getCurrentInstance} from "vue";
 import Message from "@/utils/Message";
 import Confirm from "@/utils/Confirm";
 import Local from "admin/src/utils/Local";
+import {InteractService} from "@/api/services/InteractService";
+import type {DanmuLoadRequest} from "@/api/models/request/Danmu/DanmuLoadRequest";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance()
@@ -84,37 +86,26 @@ const tableOptions = ref({
   extHeight: 0,
 })
 
-const searchForm = ref({})
-const tableData = ref({})
+const searchForm = ref({"videoNameFuzzy": ""})
+const tableData = ref({} as any)
 const loadDataList = async () => {
-  let params = {
-    pageNo: tableData.value.pageNo,
+  let danmuLoadRequest: DanmuLoadRequest = {
+    current: tableData.value.pageNo,
     pageSize: tableData.value.pageSize,
-  }
-  Object.assign(params, searchForm.value)
-  let result = await proxy.Request({
-    url: proxy.Api.loadDanmu,
-    params: params,
-  })
+    videoNameFuzzy: searchForm.value.videoNameFuzzy,
+  };
+  let result = await InteractService.loadDanmu(danmuLoadRequest);
   if (!result) {
     return
   }
-  Object.assign(tableData.value, result.data)
+  Object.assign(tableData.value, result)
 }
 
-const delDanmu = (danmuId) => {
+const delDanmu = (danmuId: number) => {
   Confirm({
     message: '确定要删除吗？',
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.delDanmu,
-        params: {
-          danmuId,
-        },
-      })
-      if (!result) {
-        return
-      }
+      await InteractService.deleteDanmu(danmuId);
       Message.success('删除成功')
       await loadDataList()
     },

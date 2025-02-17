@@ -1,8 +1,12 @@
 import type {CheckCodeVO} from "@/api/models/response/User/CheckCodeVO";
 import request from "@/api/core/request";
-import {Web} from "@/api/core/Url";
+import {Admin, Web} from "@/api/core/Url";
 import type {UserVO} from "@/api/models/response/User/UserVO";
 import type {UserLoginRequest} from "@/api/models/request/User/UserLoginRequest";
+import type {UserLoadRequest} from "@/api/models/request/User/UserLoadRequest";
+import type {Page} from "@/common/Page";
+import type {User} from "@/api/models/response/User/User";
+import type {UserChangeStatusRequest} from "@/api/models/request/User/UserChangeStatusRequest";
 
 export class UserService {
     /**
@@ -30,5 +34,23 @@ export class UserService {
             body: userLoginRequest,
             dataType: 'json'
         })
+    }
+
+    public static async loadUser(userLoadRequest: UserLoadRequest): Promise<Page<User>> {
+        return await request<Page<User>>({
+            url: Admin.loadUser,
+            method: 'POST',
+            body: userLoadRequest,
+            dataType: 'json'
+        })
+    }
+
+    public static async changeStatus(userChangeStatusRequest: UserChangeStatusRequest): Promise<boolean> {
+        return await request<boolean>({
+            url: Admin.changeStatus,
+            method: 'POST',
+            body: userChangeStatusRequest,
+            dataType: 'json'
+        });
     }
 }

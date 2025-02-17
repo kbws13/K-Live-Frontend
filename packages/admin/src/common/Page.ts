@@ -4,4 +4,5 @@ export type Page<T> = {
     size: number,
     current: number,
     searchCount: boolean,
+    pageSize: number,
 }

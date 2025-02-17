@@ -6,7 +6,7 @@
           <el-col :span="5">
             <!--input输入-->
             <el-form-item label="视频">
-              <el-input clearable placeholder="输入视频名称搜索" v-model="searchForm.videoNameFuzzy"></el-input>
+              <el-input clearable placeholder="输入视频名称搜索" v-model="searchForm.videoName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="5">
@@ -60,9 +60,11 @@ import {ElCard, ElForm, ElRow, ElCol, ElFormItem, ElInput, ElButton} from "eleme
 import Confirm from "@/utils/Confirm";
 import Message from "@/utils/Message";
 import {ref, getCurrentInstance} from "vue";
+import {InteractService} from "@/api/services/InteractService";
+import type {CommentLoadRequest} from "@/api/models/request/VideoComment/CommentLoadRequest";
 
 // @ts-ignore
-const { proxy } = getCurrentInstance()
+const {proxy} = getCurrentInstance()
 
 const columns = [
   {
@@ -81,35 +83,27 @@ const tableOptions = ref({
   extHeight: 0,
 })
 
-const searchForm = ref({})
+const searchForm = ref({"videoName": ""});
 
-const tableData = ref({})
+const tableData = ref({} as any)
 const loadDataList = async () => {
-  let params = {
-    pageNo: tableData.value.pageNo,
+  let commentLoadRequest: CommentLoadRequest = {
+    current: tableData.value.pageNo,
     pageSize: tableData.value.pageSize,
-  }
-  Object.assign(params, searchForm.value)
-  let result = await proxy.Request({
-    url: proxy.Api.loadComment,
-    params: params,
-  })
+    videoName: searchForm.value.videoName,
+  };
+  let result = await InteractService.loadComment(commentLoadRequest);
   if (!result) {
     return
   }
-  Object.assign(tableData.value, result.data)
+  Object.assign(tableData.value, result)
 }
 
-const delComment = (commentId) => {
+const delComment = (commentId: number) => {
   Confirm({
     message: '确定要删除吗？',
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.delComment,
-        params: {
-          commentId,
-        },
-      })
+      let result = await InteractService.deleteComment(commentId);
       if (!result) {
         return
       }
@@ -123,12 +117,15 @@ const delComment = (commentId) => {
 <style lang="scss" scoped>
 .comment-info {
   display: flex;
+
   .comment {
     margin-left: 10px;
   }
+
   .time-info {
     display: flex;
     font-size: 12px;
+
     .iconfont {
       margin-left: 5px;
       font-size: 13px;
@@ -136,6 +133,7 @@ const delComment = (commentId) => {
     }
   }
 }
+
 .video-name {
   text-decoration: none;
   color: var(--text3);

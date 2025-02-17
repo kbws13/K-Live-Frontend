@@ -5,7 +5,7 @@
         <el-row :gutter="10">
           <el-col :span="5">
             <el-form-item label="用户昵称">
-              <el-input clearable placeholder="输入用户昵称" v-model="searchForm.nickNameFuzzy"></el-input>
+              <el-input clearable placeholder="输入用户昵称" v-model="searchForm.nickName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="5">
@@ -60,10 +60,16 @@
 
 <script lang="ts" setup>
 import {ElCard, ElForm, ElRow, ElCol, ElButton, ElInput, ElFormItem, ElSelect, ElOption} from "element-plus";
-import {ref} from "vue";
+import {getCurrentInstance, ref} from "vue";
 import Message from "@/utils/Message";
 import Confirm from "@/utils/Confirm";
+import type {UserLoadRequest} from "@/api/models/request/User/UserLoadRequest";
+import type {Page} from "@/common/Page";
+import type {User} from "@/api/models/response/User/User";
+import {UserService} from "@/api/services/UserService";
 
+// @ts-ignore
+const {proxy} = getCurrentInstance();
 const SEX_MAP = {
   0: '女',
   1: '男',
@@ -131,34 +137,29 @@ const tableOptions = ref({
   extHeight: 0,
 })
 
-const searchForm = ref({})
-const tableData = ref({})
+const searchForm = ref({} as any)
+const tableData = ref<Page<User>>({} as Page<User>);
 const loadDataList = async () => {
-  let params = {
-    pageNo: tableData.value.pageNo,
+  let userLoadRequest: UserLoadRequest = {
+    current: tableData.value.current,
     pageSize: tableData.value.pageSize,
-  }
-  Object.assign(params, searchForm.value)
-  let result = await proxy.Request({
-    url: proxy.Api.loadUser,
-    params: params,
-  })
+    nickName: searchForm.value.nickName,
+    email: searchForm.value.email,
+  };
+  let result = await UserService.loadUser(userLoadRequest);
   if (!result) {
     return
   }
-  Object.assign(tableData.value, result.data)
+  Object.assign(tableData.value, result)
 }
 
-const changeStatus = (row) => {
+const changeStatus = (row: User) => {
   Confirm({
-    message: `确定要${row.status == 0 ? '启用' : '禁用'}吗？`,
+    message: `确定要${row.userRole == "ban" ? '启用' : '禁用'}吗？`,
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.changeStatus,
-        params: {
-          userId: row.userId,
-          status: row.status == 0 ? 1 : 0,
-        },
+      let result = await UserService.changeStatus({
+        userId: row.id,
+        userRole: row.userRole == "ban" ? "user" : "ban",
       })
       if (!result) {
         return

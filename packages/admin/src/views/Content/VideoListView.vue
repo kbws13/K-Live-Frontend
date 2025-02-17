@@ -68,7 +68,7 @@
         </div>
       </template>
 
-      <template #videoName="{ index, row }">
+      <template #videoName="{ row }">
         <div class="video-info">
           <div class="video-name">{{ row.videoName }}</div>
           <div class="user-name iconfont icon-upzhu">{{ row.nickName }}</div>
@@ -87,17 +87,17 @@
         </div>
       </template>
 
-      <template #statusName="{ row, index }">
+      <template #statusName="{ row }">
         <span :style="{ color: statusMap[row.status] }">{{
             row.statusName
           }}</span>
       </template>
 
-      <template #recommendType="{ row, index }">
+      <template #recommendType="{ row }">
         {{ row.recommendType == 1 ? "已推荐" : "未推荐" }}
       </template>
 
-      <template #slotOperation="{ index, row }">
+      <template #slotOperation="{ row }">
         <div class="row-op-panel">
           <a
               class="a-link"
@@ -156,8 +156,13 @@ import Message from "@/utils/Message";
 import Confirm from "@/utils/Confirm";
 import Local from "web/src/utils/Local";
 import type {VideoPostQueryRequest} from "@/api/models/request/VideoPost/VideoPostQueryRequest";
+import {CategoryService} from "@/api/services/CategoryService";
+import type {CategoryQueryRequest} from "@/api/models/request/Category/CategoryQueryRequest";
+import type {Category} from "@/api/models/response/Category/Category";
+import type {VideoPostVO} from "@/api/models/response/VideoPost/VideoPostVO";
+import {VideoService} from "@/api/services/VideoService";
 
-const searchForm = ref<VideoPostQueryRequest>({} as VideoPostQueryRequest);
+const searchForm = ref({} as any);
 
 const tableData = ref({} as any);
 const tableOptions = ref({
@@ -212,81 +217,65 @@ const columns = [
 const tableInfoRef = ref();
 
 const loadDataList = async () => {
-  let params = {
-    pageNo: tableData.value.current,
+  let videoPostQueryRequest: VideoPostQueryRequest = {
+    current: tableData.value.current,
     pageSize: tableData.value.pageSize,
+    queryCount: true,
+    queryUserInfo: true,
   };
-  Object.assign(params, searchForm.value);
+  Object.assign(videoPostQueryRequest, searchForm.value);
 
-  if (params.categoryIdArray && params.categoryIdArray.length == 2) {
-    params.categoryId = params.categoryIdArray[1];
-  } else if (params.categoryIdArray && params.categoryIdArray.length == 1) {
-    params.pCategoryId = params.categoryIdArray[0];
+  if (searchForm.value.categoryIdArray && searchForm.value.categoryIdArray.length == 2) {
+    videoPostQueryRequest.categoryId = searchForm.value.categoryIdArray[1];
+  } else if (searchForm.value.categoryIdArray && searchForm.value.categoryIdArray.length == 1) {
+    videoPostQueryRequest.parentCategoryId = searchForm.value.categoryIdArray[0];
   }
-  let result = await proxy.Request({
-    url: proxy.Api.loadVideo,
-    params: params,
-  });
+  let result = await VideoService.loadVideoPost(videoPostQueryRequest);
   if (!result) {
     return;
   }
-  Object.assign(tableData.value, result.data);
+  Object.assign(tableData.value, result);
 };
 
-const categoryList = ref([]);
+const categoryList = ref<Category[]>([] as Category[]);
 const loadCategory = async () => {
-  let result = await proxy.Request({
-    url: proxy.Api.loadCategory,
-  });
+  let result = await CategoryService.queryCategory({coverLine2Tree: true} as CategoryQueryRequest);
   if (!result) {
     return;
   }
-  categoryList.value = result.data;
+  categoryList.value = result;
 };
 loadCategory();
 
 //详情
 const videoDetailRef = ref();
-const showDetail = (data) => {
+const showDetail = (data: VideoPostVO) => {
   videoDetailRef.value.show(data);
 };
 
 //审核
 const auditRef = ref();
-const audit = (row) => {
-  auditRef.value.show(row.videoId);
+const audit = (row: VideoPostVO) => {
+  auditRef.value.show(row.id);
 };
 //删除
-const delAccount = (data) => {
+const delAccount = (data: VideoPostVO) => {
   Confirm({
-    message: `确定要删除【${data.videoName}】吗？`,
+    message: `确定要删除【${data.name}】吗？`,
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.deleteVideo,
-        params: {
-          videoId: data.videoId,
-        },
-      });
-      if (!result) {
-        return;
-      }
+      await VideoService.deleteVideo(data.id);
       Message.success("操作成功");
       await loadDataList();
     },
   });
 };
 
-const recommend = (data) => {
+const recommend = (data: VideoPostVO) => {
   const recommendName = data.recommendType == 0 ? "推荐" : "取消推荐";
   Confirm({
-    message: `确定要【${recommendName}】【${data.videoName}】吗？`,
+    message: `确定要【${recommendName}】【${data.name}】吗？`,
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.recommendVideo,
-        params: {
-          videoId: data.videoId,
-        },
-      });
+      let result = await VideoService.recommendVideo(data.id);
       if (!result) {
         return;
       }

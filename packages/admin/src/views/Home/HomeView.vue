@@ -26,8 +26,18 @@
 import {ElCard} from "element-plus";
 import * as echarts from 'echarts'
 import {ref, shallowRef, nextTick} from "vue";
+import {StatisticService} from "@/api/services/StatisticService";
 
-const dataPartList = ref([
+interface DataPart {
+  name: string;
+  icon: string;
+  totalCountKey: string;
+  preDataType: number;
+  totalCount: number;
+  preCount: number;
+}
+
+const dataPartList = ref<DataPart[]>([
   {
     name: '用户数',
     icon: 'icon-user',
@@ -97,14 +107,12 @@ const init = () => {
 init()
 
 const getActualTimeStatisticsInfo = async () => {
-  let result = await proxy.Request({
-    url: proxy.Api.getActualTimeStatisticsInfo,
-  })
+  let result = await StatisticService.getActualTime();
   if (!result) {
     return
   }
-  const totalCountInfo = result.data.totalCountInfo
-  const preDayData = result.data.preDayData
+  const totalCountInfo = result.totalCountInfo
+  const preDayData = result.preDayData
 
   dataPartList.value.forEach((item) => {
     item.totalCount = totalCountInfo[item.totalCountKey]
@@ -114,27 +122,22 @@ const getActualTimeStatisticsInfo = async () => {
   })
 }
 
-const loadWeekDataHandler = (item) => {
+const loadWeekDataHandler = (item: DataPart) => {
   currentDataPart.value = item
   loadWeekData()
 }
 
 const currentDataPart = ref(dataPartList.value[0])
 const loadWeekData = async () => {
-  let result = await proxy.Request({
-    url: proxy.Api.getWeekStatisticsInfo,
-    params: {
-      dataType: currentDataPart.value.preDataType,
-    },
-  })
+  let result = await StatisticService.getWeek(currentDataPart.value.preDataType);
   if (!result) {
     return
   }
-  const dateArray = []
-  const dataCountArray = []
-  result.data.forEach((item) => {
-    dateArray.push(item.statisticsDate)
-    dataCountArray.push(item.statisticsCount)
+  const dateArray: string[] = []
+  const dataCountArray: number[] = []
+  result.forEach((item) => {
+    dateArray.push(item.statisticDate)
+    dataCountArray.push(item.count)
   })
 
   const option = {

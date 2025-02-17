@@ -84,8 +84,10 @@
 import {ElForm, ElFormItem, ElInput, ElButton} from "element-plus";
 import {ref} from "vue";
 import Message from "@/utils/Message";
+import {SystemService} from "@/api/services/SystemService";
+import type {SystemSetting} from "@/api/models/response/Setting/SystemSetting";
 
-const formData = ref({});
+const formData = ref<SystemSetting>({} as SystemSetting);
 const formDataRef = ref();
 const rules = {
   title: [{ required: true, message: "请输入内容" }],
@@ -96,30 +98,20 @@ const rules = {
 };
 
 const getSetting = async () => {
-  let result = await proxy.Request({
-    url: proxy.Api.getSetting,
-  });
+  let result = await SystemService.getSystemSetting();
   if (!result) {
     return;
   }
-  formData.value = result.data;
+  formData.value = result;
 };
 getSetting();
 
 const saveSetting = () => {
-  formDataRef.value.validate(async (valid) => {
+  formDataRef.value.validate(async (valid: boolean) => {
     if (!valid) {
       return;
     }
-    let params = {};
-    Object.assign(params, formData.value);
-    let result = await proxy.Request({
-      url: proxy.Api.saveSetting,
-      params,
-    });
-    if (!result) {
-      return;
-    }
+    await SystemService.saveSystemSetting(formData.value);
     Message.success("保存成功");
   });
 };

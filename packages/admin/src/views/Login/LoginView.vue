@@ -123,7 +123,7 @@ const doSubmit = async () => {
   align-items: center;
   justify-content: center;
   height: calc(100vh);
-  background: url("../assets/login-bg.png") center, center;
+  background: url("../../assets/login-bg.png") center, center;
   background-size: 100% 100%;
   .login-panel {
     background-color: rgba(255, 255, 255, 0.8);

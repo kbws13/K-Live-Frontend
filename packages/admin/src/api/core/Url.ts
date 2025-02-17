@@ -94,4 +94,18 @@ export const Admin = {
     recommendVideo: "/admin/video/recommendVideo",
     deleteVideo: "/admin/video/deleteVideo",
     loadVideoPList: "/admin/video/loadVideoPList",
+    // 统计
+    getActualTime: "/admin/statistic/getActualTime",
+    getWeek: "/admin/statistic/getWeek",
+    // 互动
+    loadComment: "/admin/interact/loadComment",
+    deleteComment: "/admin/interact/deleteComment",
+    loadDanmu: "/admin/interact/loadDanmu",
+    deleteDanmu: "/admin/interact/deleteDanmu",
+    // 系统设置
+    getSystemSetting: "/admin/system/getSystemSetting",
+    saveSystemSetting: "/admin/system/saveSystemSetting",
+    // 用户
+    loadUser: "/admin/user/loadUser",
+    changeStatus: "/admin/user/changeStatus",
 }
