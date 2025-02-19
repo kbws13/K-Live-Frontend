@@ -69,7 +69,7 @@ export class VideoService {
      */
     public static async loadVideoPList(videoId: string): Promise<VideoFilePost[]> {
         return await request<VideoFilePost[]>({
-            url: Admin.recommendVideo,
+            url: Admin.loadVideoPList,
             method: "POST",
             body: {
                 videoId: videoId,

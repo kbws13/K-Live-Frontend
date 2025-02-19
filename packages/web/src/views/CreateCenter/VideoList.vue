@@ -84,8 +84,9 @@ const cleanStatusLoad = () => {
 const dataSource = ref({} as any);
 const loadVideoList = async () => {
   let params = {
-    current: dataSource.value.pageNo,
+    current: dataSource.value.current,
     videoName: videoNameFuzzy.value,
+    pageSize: 20,
     status: status.value,
   } as VideoPostQueryRequest;
 

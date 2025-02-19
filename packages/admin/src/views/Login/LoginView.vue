@@ -34,25 +34,6 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item prop="checkCode">
-        <div class="check-code-panel">
-          <el-input
-              size="large"
-              placeholder="请输入验证码"
-              v-model="formData.checkCode"
-              @keyup.enter="doSubmit"
-          >
-            <template #prefix>
-              <span class="iconfont icon-checkcode"></span>
-            </template>
-          </el-input>
-          <img
-              :src="checkCodeInfo?.checkCode"
-              class="check-code"
-              @click="changeCheckCode()"
-           alt=""/>
-        </div>
-      </el-form-item>
       <el-button type="primary" size="large" class="op-btn" @click="doSubmit">
         登录
       </el-button>
@@ -61,13 +42,12 @@
 </template>
 
 <script lang="ts" setup>
-import {  ElForm, ElFormItem, ElButton, ElInput } from "element-plus"
-import { ref, getCurrentInstance } from "vue";
+import {ElButton, ElForm, ElFormItem, ElInput} from "element-plus"
+import {getCurrentInstance, ref} from "vue";
 import {useRouter} from "vue-router";
-import { md5 } from "js-md5";
+import {md5} from "js-md5";
 import Message from "web/src/utils/Message";
 import {userLoginStore} from "web/src/stores/UserStore";
-import type {CheckCodeVO} from "@/api/models/response/User/CheckCodeVO";
 import type {UserLoginRequest} from "@/api/models/request/User/UserLoginRequest";
 import {UserService} from "@/api/services/UserService";
 
@@ -75,30 +55,18 @@ import {UserService} from "@/api/services/UserService";
 const { proxy } = getCurrentInstance();
 const loginStore = userLoginStore();
 const router = useRouter();
-//验证码
-const checkCodeInfo = ref<CheckCodeVO>();
-const changeCheckCode = async () => {
-  const res = await UserService.checkCode();
-  if (!res) {
-    return;
-  }
-  checkCodeInfo.value = res;
-}
-changeCheckCode();
 
 // 0:注册 1:登录
 const formData = ref({
   email: '',
   password: '',
   nickName: '',
-  checkCode: '',
   checkPassword: '',
 });
 const formDataRef = ref();
 const rules = {
   account: [{ required: true, message: "请输入账号" }],
   password: [{ required: true, message: "请输入密码" }],
-  checkCode: [{ required: true, message: "请输入图片验证码" }],
 };
 
 // 登录、注册、重置密码  提交表单

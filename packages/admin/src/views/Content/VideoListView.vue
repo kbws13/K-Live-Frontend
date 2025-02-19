@@ -59,18 +59,18 @@
         :options="tableOptions"
         :extHeight="tableOptions.extHeight"
     >
-      <template #videoCover="{ row }">
+      <template #cover="{ row }">
         <div class="cover-info">
-          <Cover :source="row.videoCover" :width="160"></Cover>
+          <Cover :source="row.cover" :width="160"></Cover>
           <div class="duration">
             {{ Local.convertSecondsToHMS(row.duration) }}
           </div>
         </div>
       </template>
 
-      <template #videoName="{ row }">
+      <template #name="{ row }">
         <div class="video-info">
-          <div class="video-name">{{ row.videoName }}</div>
+          <div class="video-name">{{ row.name }}</div>
           <div class="user-name iconfont icon-upzhu">{{ row.nickName }}</div>
           <div class="video-count">
             <span class="iconfont icon-play-solid">{{ row.playCount }}</span>
@@ -180,14 +180,14 @@ const statusMap = {
 const columns = [
   {
     label: "封面",
-    prop: "videoCover",
+    prop: "cover",
     width: 220,
-    scopedSlots: "videoCover",
+    scopedSlots: "cover",
   },
   {
     label: "视频信息",
-    prop: "videoName",
-    scopedSlots: "videoName",
+    prop: "name",
+    scopedSlots: "name",
   },
   {
     label: "最后更新时间",

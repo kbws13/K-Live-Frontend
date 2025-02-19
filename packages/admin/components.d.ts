@@ -7,6 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('./src/components/Avatar.vue')['default']
+    Collapse: typeof import('./src/components/Collapse.vue')['default']
+    Cover: typeof import('./src/components/Cover.vue')['default']
+    DataList: typeof import('./src/components/DataList.vue')['default']
+    Dialog: typeof import('./src/components/Dialog.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -30,9 +35,15 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
+    ImageCoverCut: typeof import('./src/components/ImageCoverCut.vue')['default']
+    ImageCoverSelect: typeof import('./src/components/ImageCoverSelect.vue')['default']
+    ImageUpload: typeof import('./src/components/ImageUpload.vue')['default']
     Menu: typeof import('./src/components/Menu.vue')['default']
+    NoData: typeof import('./src/components/NoData.vue')['default']
+    Player: typeof import('./src/components/Player.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Table: typeof import('./src/components/Table.vue')['default']
     TagList: typeof import('./src/components/TagList.vue')['default']
   }
 }

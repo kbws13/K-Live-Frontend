@@ -63,7 +63,7 @@
                   href="javascript:void(0)"
                   @click="changeSort(0, index, 'down')"
                   :class="[
-                  index == tableData.list.length - 1 ? 'disable' : 'a-link',
+                  index == tableData.records.length - 1 ? 'disable' : 'a-link',
                 ]"
               >下移</a
               >
@@ -82,11 +82,29 @@
         </template>
         <Table
             :columns="columnSub"
+            :fetch="loadDataList"
             :dataSource="subCategoryData"
             :options="tableOptions"
             :extHeight="tableOptions.extHeight"
             :showPagination="false"
         >
+          <template #icon="{ index, row }">
+            <div class="cover">
+              <Cover
+                  :source="row.icon"
+                  defaultImg="default_image.png"
+              ></Cover>
+            </div>
+          </template>
+          <template #background="{ index, row }">
+            <div class="category-background">
+              <Cover
+                  :source="row.background"
+                  fit="cover"
+                  defaultImg="default_banner.png"
+              ></Cover>
+            </div>
+          </template>
           <template #slotOperation="{ index, row }">
             <div class="row-op-panel">
               <a
@@ -114,7 +132,7 @@
                   href="javascript:void(0)"
                   @click="changeSort(row.pCategoryId, index, 'down')"
                   :class="[
-                  index == tableData.list.length - 1 ? 'disable' : 'a-link',
+                  index == tableData.records.length - 1 ? 'disable' : 'a-link',
                 ]"
               >下移</a
               >
@@ -128,7 +146,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ElRow, ElCol, ElCard, ElDivider } from "element-plus";
+import {ElRow, ElCol, ElCard, ElDivider} from "element-plus";
 import {nextTick, ref} from "vue";
 import CategoryEdit from "@/views/Content/components/CategoryEdit.vue";
 import Message from "@/utils/Message";
@@ -138,13 +156,15 @@ import type {CategoryQueryRequest} from "@/api/models/request/Category/CategoryQ
 import type {Category} from "@/api/models/response/Category/Category";
 
 const tableData = ref({
-  list: [] as Category[]
+  records: [] as Category[]
 });
 const tableOptions = ref({
   extHeight: 0,
 });
-const currentSelectCategory = ref<Category>({} as Category);
-const subCategoryData = ref<Category[]>([] as Category[]);
+const currentSelectCategory = ref<Category | null>(null);
+const subCategoryData = ref({
+  records: [] as Category[]
+});
 
 const columns = [
   {
@@ -161,12 +181,12 @@ const columns = [
   },
   {
     label: "分类编号",
-    prop: "categoryCode",
+    prop: "code",
     width: 180,
   },
   {
     label: "分类名称",
-    prop: "categoryName",
+    prop: "name",
   },
   {
     label: "操作",
@@ -180,32 +200,31 @@ const columnSub = columns.slice(columns.length - 3, columns.length);
 
 const tableInfoRef = ref();
 const loadDataList = async () => {
-  let result = await CategoryService.queryCategory({} as CategoryQueryRequest);
+  let result = await CategoryService.queryCategory({coverLine2Tree: true} as CategoryQueryRequest);
   if (!result) {
     return;
   }
-  tableData.value.list = result;
+  tableData.value.records = result;
   if (currentSelectCategory.value == null && result.length > 0) {
     currentSelectCategory.value = result[0];
-    subCategoryData.value = result[0].children;
+    subCategoryData.value.records = result[0].children;
   } else {
     currentSelectCategory.value = result.find((item: Category) => {
-      return item.id == currentSelectCategory.value.id;
+      return item.id == currentSelectCategory.value!.id;
     })!;
-    subCategoryData.value = currentSelectCategory.value.children;
+    subCategoryData.value.records = currentSelectCategory.value.children;
   }
   await nextTick(() => {
     tableInfoRef.value.setCurrentRow(
-        "categoryId",
-        currentSelectCategory.value.id
+        "id",
+        currentSelectCategory.value!.id
     );
   });
 };
 
 
-
 const rowClick = (row: Category) => {
-  subCategoryData.value = row.children;
+  subCategoryData.value.records = row.children;
   currentSelectCategory.value = row;
 };
 
@@ -224,7 +243,7 @@ const delCategory = (data: Category) => {
       }
       Message.success("操作成功");
       //清空选中
-      if (currentSelectCategory.value.id == data.id) {
+      if (currentSelectCategory.value!.id == data.id) {
         currentSelectCategory.value = {} as Category;
       }
       await loadDataList();
@@ -235,8 +254,8 @@ const delCategory = (data: Category) => {
 const changeSort = async (parentCategoryId: number, index: number, type: string) => {
   let dataList =
       parentCategoryId == 0
-          ? tableData.value.list
-          : currentSelectCategory.value.children;
+          ? tableData.value.records
+          : currentSelectCategory.value!.children;
   if (
       (type === "down" && index == dataList.length - 1) ||
       (type == "up" && index == 0)
@@ -273,7 +292,7 @@ const showEdit = (data: Category, type: number) => {
   if (type == 0) {
     data.parentCategoryId = 0;
   } else if (type == 1 && Object.keys(data).length == 0) {
-    data.parentCategoryId = currentSelectCategory.value.id;
+    data.parentCategoryId = currentSelectCategory.value!.id;
   }
   categoryEditRef.value.showEdit(Object.assign({}, data));
 };
