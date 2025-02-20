@@ -37,9 +37,10 @@ const autoPlay = ref(true);
 const currentP = ref(route.query.p ? Number.parseInt(route.query.p as string) : 1);
 const emit = defineEmits(["selectVideoFile"]);
 const videoList = ref<VideoFile[]>([]);
+console.log("route.params.videoId", route.params.videoId);
 
 const loadVideoPList = async () => {
-    let result = await VideoService.loadVideoPList(route.params.videoId[0]);
+    let result = await VideoService.loadVideoPList(route.params.videoId as string);
     if (!result) {
         return;
     }

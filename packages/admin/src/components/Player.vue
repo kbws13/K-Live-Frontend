@@ -178,7 +178,7 @@ defineExpose({
 
 onMounted(() => {
   mitter.on("changeP", (fileId) => {
-    player.switch = `/api${Resource.videoResource}/${fileId}`;
+    player.switch = `/api/admin${Resource.videoResource}/${fileId}`;
   });
 });
 

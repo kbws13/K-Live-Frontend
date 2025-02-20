@@ -19,22 +19,24 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {VideoService} from "@/api/services/VideoService";
+import type {Page} from "@/common/Page";
+import type {Video} from "@/api/models/response/Video/Video";
 
 const loadingData = ref(false)
-const dataSource = ref({})
+const dataSource = ref<Page<Video>>({} as Page<Video>)
 const loadDataList = async () => {
   loadingData.value = true
   let result = await VideoService.loadHotVideoList({
-    current: dataSource.value.pageNo,
+    current: dataSource.value.current,
   })
   loadingData.value = false
   if (!result) {
     return
   }
-  const dataList = dataSource.value.list
+  const dataList = dataSource.value.records
   dataSource.value = Object.assign({}, result.records)
   if (result.current > 1) {
-    dataSource.value.list = dataList.concat(result.records)
+    dataSource.value.records = dataList.concat(result.records)
   }
 }
 loadDataList()

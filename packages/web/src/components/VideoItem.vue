@@ -1,9 +1,9 @@
 <template>
     <div ref="videoItemRef" :class="['video-item', layoutType === 1 ? 'video-item2' : '']"
         :style="{ 'margin-top': marginTop + 'px' }">
-        <router-link :to="`/video/${data.videoId}`" target="_blank">
+        <router-link :to="`/video/${data.id}`" target="_blank">
             <div class="cover" @click="showDetail">
-                <Cover :source="data.videoCover"></Cover>
+                <Cover :src="data.cover"></Cover>
                 <div class="shade">
                     <div class="play-count" v-show="layoutType === 0">
                         <div class="iconfont icon-play2">{{ data.playCount }}</div>
@@ -15,7 +15,7 @@
         </router-link>
         <div class="video-info">
             <!--高亮html展示-->
-            <router-link class="title" :to="`/video/${data.videoId}`" v-html="data.videoName"
+            <router-link class="title" :to="`/video/${data.id}`" v-html="data.name"
                 target="_blank"></router-link>
             <router-link class="user-name" :to="`/user/${data.userId}`" target="_blank">
                 <span class="iconfont icon-upzhu">{{ data.nickName }} · </span>

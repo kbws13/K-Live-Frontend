@@ -1,7 +1,7 @@
 <template>
     <div :class="[layoutType === 'grid' ? 'data-list-grad' : '']"
         :style="{ 'grid-template-columns': `repeat(${gridCount}, 1fr)` }">
-        <template v-for="item in props.dataSource!.list">
+        <template v-for="item in props.dataSource!.records">
             <slot :data="item"></slot>
         </template>
     </div>
@@ -9,13 +9,13 @@
         <img :src="Local.getLocalImage('playing.gif')"  alt=""/>数据加载中....
     </div>
     <div v-if="
-        props.dataSource!.pageNo >= props.dataSource!.pageTotal &&
+        props.dataSource!.current >= props.dataSource!.total &&
         !loading &&
-        props.dataSource!.list.length > 0
+        props.dataSource!.records.length > 0
     " class="reach-bottom">
         {{ loadEndMsg }}
     </div>
-    <NoData v-if="props.dataSource!.list && props.dataSource!.list.length === 0"> </NoData>
+    <NoData v-if="props.dataSource!.records && props.dataSource!.records.length === 0"> </NoData>
 </template>
 
 <script lang="ts" setup>
@@ -52,10 +52,10 @@ const scrollHandler = (curScrollTop: number) => {
     if (window.innerHeight + curScrollTop < document.body.offsetHeight) {
         return;
     }
-    if (props.loading || props.dataSource!.pageNo >= props.dataSource!.pageTotal) {
+    if (props.loading || props.dataSource!.current >= props.dataSource!.total) {
         return;
     }
-    props.dataSource!.pageNo++;
+    props.dataSource!.current++;
     emit("loadData");
 };
 

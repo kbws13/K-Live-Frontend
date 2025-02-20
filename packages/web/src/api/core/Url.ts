@@ -44,6 +44,7 @@ export const Web = {
     getAllCategory: "/web/category/getAllCategory",
     // 视频
     getVideoInfo: "/web/video/getVideoInfo",
+    getVideoList: "/web/video/loadVideoList",
     getRecommendVideo: "/web/video/getRecommendVideo",
     reportVideoPlayOnline: "/web/video/reportVideoPlayOnline",
     loadVideoPList: "/web/video/loadVideoPList",

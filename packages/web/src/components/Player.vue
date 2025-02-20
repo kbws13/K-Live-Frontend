@@ -137,7 +137,7 @@ const initPlayer = () => {
                     await postDanmu(danmu)
                     //重新获取一下弹幕列表
                     await loadDanmuList()
-                    mitter.emit('danmSend')
+                    mitter.emit('danmuSend')
                     Message.success('发布成功')
                     return true;
                 },

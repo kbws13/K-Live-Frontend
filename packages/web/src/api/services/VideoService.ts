@@ -40,6 +40,19 @@ export class VideoService {
     }
 
     /**
+     * 获取非推荐视频列表
+     * @param videoQueryRequest
+     */
+    public static async getVideoList(videoQueryRequest: VideoQueryRequest): Promise<Page<Video>> {
+        return await request<Page<Video>>({
+            url: Web.getVideoList,
+            method: "POST",
+            body: videoQueryRequest,
+            dataType: "json"
+        })
+    }
+
+    /**
      * 上报在线观看人数
      * @param videoReportRequest 上报视频观看请求
      * @returns number

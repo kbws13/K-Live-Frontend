@@ -16,7 +16,7 @@ const useCategoryStore = defineStore("categoryStore", {
         saveCategoryList(data: Category[]) {
             this.categoryList = data;
         },
-        setCurrentCategory(data: Category) {
+        setCurrentPCategory(data: Category) {
             this.currentCategory = data;
         }
     }

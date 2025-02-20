@@ -41,6 +41,7 @@ import Confirm from "@/utils/Confirm";
 import Message from "@/utils/Message";
 import {VideoPlayHistoryService} from "@/api/services/VideoPlayHistoryService";
 import type {VideoPlayHistory} from "@/api/models/response/VideoPlayHistory/VideoPlayHistory";
+import type {Page} from "@/common/Page";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance()
@@ -48,11 +49,11 @@ const router = useRouter()
 const navActionStore = useNavigatorStore()
 
 const loadingData = ref(false)
-const dataSource = ref({})
+const dataSource = ref<Page<VideoPlayHistory>>({} as Page<VideoPlayHistory>)
 const loadDataList = async () => {
   loadingData.value = true
   let result = await VideoPlayHistoryService.loadHistory({
-    current: dataSource.value.pageNo,
+    current: dataSource.value.current,
     queryVideoInfo: true,
   });
   loadingData.value = false
@@ -60,10 +61,10 @@ const loadDataList = async () => {
     return
   }
 
-  const dataList = dataSource.value.list
+  const dataList = dataSource.value.records
   dataSource.value = Object.assign({}, result)
   if (result.current > 1) {
-    dataSource.value.list = dataList.concat(result.records)
+    dataSource.value.records = dataList.concat(result.records)
   }
 }
 loadDataList()
@@ -85,7 +86,7 @@ const cleanAll = () => {
         return
       }
       Message.success('删除成功')
-      dataSource.value = { list: [] }
+      dataSource.value = { records: [] }
     },
   })
 }
@@ -99,7 +100,7 @@ const delHistory = (videoId: string) => {
         return
       }
       Message.success('删除成功')
-      dataSource.value.list = dataSource.value.list.filter((item: VideoPlayHistory) => {
+      dataSource.value.records = dataSource.value.records.filter((item: VideoPlayHistory) => {
         return item.videoId != videoId
       })
     },
