@@ -1,5 +1,5 @@
 <template>
-  <div class="commend-panel" ref="commendPanelRef">
+  <div class="commend-panel" ref="commendPanelRef" v-if="carouselVideoList.length > 0">
     <div class="carousel-panel" :style="{
       width: carouselWidth + 'px',
       height: carouselWidth * 0.6 + 'px',
@@ -9,7 +9,7 @@
         <el-carousel-item v-for="(item, index) in carouselVideoList" :key="item" :name="index + ''">
           <div class="roll-image">
             <router-link :to="`/video/${carouselVideoList[carouselIndex].id}`" target="_blank">
-              <img :src="`${Resource.getResource}${item.cover}`"  alt=""/>
+              <img :src="`/api${Resource.getResource}${item.cover}`"  alt=""/>
             </router-link>
           </div>
         </el-carousel-item>
@@ -83,7 +83,7 @@ const carouselMaxCount = proxy.carouselMaxCount
 const carouselVideoList = ref<Video[]>([])
 const commendVideoList = ref<Video[]>([])
 const loadRecommendVideo = async () => {
-  const res = await VideoService.getRecommendVideo();
+  const res = await VideoService.loadRecommendVideo();
   if (!res) return;
   if (res.length > carouselMaxCount) {
     carouselVideoList.value = res.slice(0, carouselMaxCount)

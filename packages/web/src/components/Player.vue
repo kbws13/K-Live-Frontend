@@ -26,6 +26,7 @@ import { DanmuService } from '@/api/services/DanmuService';
 import type { Danmu } from '@/api/models/response/Danmu/Danmu';
 import Local from '@/utils/Local';
 import { VideoService } from '@/api/services/VideoService';
+import type {Video} from "@/api/models/response/Video/Video";
 
 
 const loginStore = userLoginStore();
@@ -38,13 +39,8 @@ defineProps({
 })
 
 const playerRef = ref()
-const options = {
-    url: Resource.videoResource,
-}
 
 let player: any = null
-let currentTime = null
-let startTime = null
 
 const initPlayer = () => {
     //隐藏右键菜单
@@ -102,7 +98,7 @@ const initPlayer = () => {
                     color: '#fff',
                     display: 'flex',
                 },
-                click: function (...args) {
+                click: function () {
                     changeWideScreen()
                 },
             },
@@ -115,7 +111,7 @@ const initPlayer = () => {
                     color: '#fff',
                     display: 'none',
                 },
-                click: function (...args) {
+                click: function () {
                     changeWideScreen()
                 },
             },
@@ -127,14 +123,19 @@ const initPlayer = () => {
                 theme: 'light',
                 emitter: true,
                 danmuku: function () {
-                    return new Promise<Danmu[]>(async (resovle) => {
+                    return new Promise(async (resovle) => {
                         //是否展示弹幕
                         const danmuList = await loadDanmuList()
-                        return resovle(danmuList)
+                      const danmuku = danmuList.map(danmu => ({
+                        text: danmu.text, // 弹幕文本
+                        time: danmu.time || 0, // 弹幕时间，默认为 0 或当前时间
+                        color: danmu.color || '#FFFFFF', // 弹幕颜色，默认为白色
+                      }))
+                        return resovle(danmuku)
                     })
                 },
-                beforeEmit: async (danmu: Danmu) => {
-                    await postDanmu(danmu)
+                beforeEmit: async (danmu) => {
+                    await postDanmu(danmu as Danmu)
                     //重新获取一下弹幕列表
                     await loadDanmuList()
                     mitter.emit('danmuSend')
@@ -179,7 +180,7 @@ const postDanmu = async (danmu: Danmu) => {
         return
     }
     danmu.fileId = fileId.value
-    danmu.videoId = route.params.videoId[0]
+    danmu.videoId = route.params.videoId as string
     danmu.time = Math.round(danmu.time)
     await DanmuService.postDanmu({
         videoId: danmu.videoId,
@@ -199,7 +200,7 @@ const loadDanmuList = async () => {
     }
     let result = await DanmuService.loadDanmu({
         fileId: fileId.value,
-        videoId: route.params.videoId[0],
+        videoId: route.params.videoId as string,
     })
     if (!result) {
         return []
@@ -226,7 +227,7 @@ onMounted(() => {
         fileId.value = _fileId
         //获取在线人数
         reportVideoPlayOnline()
-        player.switch = `${Resource.videoResource}/${_fileId}/`
+        player.switch = `/api${Resource.videoResource}/${_fileId}/`
         //切换弹幕
         player.plugins.artplayerPluginDanmuku.load()
     })
@@ -273,13 +274,11 @@ const cleanTimer = () => {
 }
 
 //判断是否显示弹幕
-const videoInfo = inject('videoInfo')
+const videoInfo = inject<Video>('videoInfo')
 const showDanmu = computed(() => {
     return (
-        // @ts-ignore
-        videoInfo.value.interaction == null ||
-        // @ts-ignore
-        videoInfo.value.interaction.indexOf('0') === -1
+        videoInfo!.interaction == null ||
+        videoInfo!.interaction.indexOf('0') === -1
     )
 })
 </script>

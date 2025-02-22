@@ -6,6 +6,7 @@ export const Interact = {
     loadDanmu: "/interact/danmu/loadDanmu",
     // 评论
     loadAllComment: "/interact/comment/loadAllComment",
+    loadComment: "/interact/comment/loadComment",
     topComment: "/interact/comment/topComment",
     cancelTop: "/interact/comment/cancelTop",
     addComment: "/interact/comment/addComment",
@@ -50,6 +51,7 @@ export const Web = {
     loadVideoPList: "/web/video/loadVideoPList",
     loadHotVideoList: "/web/video/loadHotVideoList",
     searchVideo: "/web/video/searchVideo",
+    loadRecommendVideo: "/web/video/loadRecommendVideo",
     // 合集
     loadSeries: "/web/series/loadSeries",
     loadSeriesWithVideo: "/web/series/loadSeriesWithVideo",

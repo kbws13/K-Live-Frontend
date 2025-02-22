@@ -3,7 +3,7 @@ export type VideoFile = {
     userId: string,
     videoId: string,
     fileIndex: number,
-    fileName: number,
+    fileName: string,
     fileSize: number,
     filePath: string,
     duration: number,

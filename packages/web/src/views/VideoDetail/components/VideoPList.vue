@@ -11,7 +11,7 @@
             <div :class="['video-item', index === currentP - 1 ? 'active' : '']" v-for="(item, index) in videoList"
                 @click="selectVideo(index + 1)">
                 <div class="playing" v-if="index === currentP - 1"></div>
-                <div class="title" :title="item.title">
+                <div class="title" :title="item.fileName">
                     P{{ index + 1 }} {{ item.fileName }}
                 </div>
                 <div class="duration">

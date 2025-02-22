@@ -9,7 +9,7 @@
         <div :class="[
             'iconfont icon-toubi',
             videoInfo.coinCountActive ? 'active' : '',
-        ]" @click="userActionCoin('VIDEO_COIN')">
+        ]" @click="userActionCoin()">
             {{ videoInfo.coinCount }}
         </div>
         <div :class="[
@@ -25,47 +25,89 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router';
 import VideoCoin from './VideoCoin.vue';
-import { inject } from 'vue';
+import {inject, ref} from 'vue';
 import { userLoginStore } from '@/stores/UserStore';
 import { doUserAction } from '@/api';
 import { ACTION_TYPE } from '@/constant/ActionConstants';
+import type {Video} from "@/api/models/response/Video/Video";
+import Message from "@/utils/Message";
 
 const route = useRoute();
-const videoInfo = inject("videoInfo");
+const videoInfo = inject<Video>("videoInfo", {} as Video);
 const loginStore = userLoginStore();
 
 
-const userAction = (type: string) => {
+const userAction = (type: keyof typeof ACTION_TYPE) => {
   if (Object.keys(loginStore.userInfo).length === 0) {
     loginStore.setLogin(true);
     return;
   }
   doUserAction(
     {
-      videoId: route.params.videoId[0],
+      videoId: route.params.videoId as string,
       actionType: ACTION_TYPE[type].value,
     },
     () => {
       if (type === "VIDEO_LIKE") {
-        if (videoInfo.value.likeCountActive) {
-          videoInfo.value.likeCountActive = false;
-          videoInfo.value.likeCount--;
+        if (videoInfo.likeCountActive) {
+          videoInfo.likeCountActive = false;
+          videoInfo.likeCount--;
         } else {
-          videoInfo.value.likeCountActive = true;
-          videoInfo.value.likeCount++;
+          videoInfo.likeCountActive = true;
+          videoInfo.likeCount++;
         }
       } else if (type === "VIDEO_COLLECT") {
-        if (videoInfo.value.collectCountActive) {
-          videoInfo.value.collectCountActive = false;
-          videoInfo.value.collectCount--;
+        if (videoInfo.collectCountActive) {
+          videoInfo.collectCountActive = false;
+          videoInfo.collectCount--;
         } else {
-          videoInfo.value.collectCountActive = true;
-          videoInfo.value.collectCount++;
+          videoInfo.collectCountActive = true;
+          videoInfo.collectCount++;
         }
       }
     }
   );
 };
+
+const videoCoinRef = ref();
+const userActionCoin = () => {
+  if (Object.keys(loginStore.userInfo).length === 0) {
+    loginStore.setLogin(true);
+    return;
+  }
+  if (videoInfo.coinCountActive) {
+    Message.warning("对本稿件的投币枚数已用完");
+    return;
+  }
+  videoCoinRef.value.show();
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.action-panel {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e3e5e7;
+  padding: 20px 0;
+  .iconfont {
+    cursor: pointer;
+    color: #61666d;
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+    &::before {
+      margin-right: 10px;
+      font-size: 35px;
+    }
+
+    &:hover {
+      color: #4d4e4f;
+    }
+  }
+  .active {
+    &::before {
+      color: var(--blue);
+    }
+  }
+}
+</style>

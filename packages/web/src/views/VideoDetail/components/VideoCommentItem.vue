@@ -42,7 +42,7 @@
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item @click="topComment"
-                                v-if="videoInfo.userId === loginStore.userInfo.id && data.pCommentId === 0">{{
+                                v-if="videoInfo.userId === loginStore.userInfo.id && data.parentCommentId === 0">{{
                                     data.topType === 1 ? "取消置顶" : "置顶" }}</el-dropdown-item>
                             <el-dropdown-item @click="delComment"
                                 v-if="videoInfo.userId === loginStore.userInfo.id || data.userId === loginStore.userInfo.id">删除</el-dropdown-item>
@@ -73,19 +73,16 @@ import { imageThumbnailSuffix } from '@/constant/ResourceConstant';
 import Confirm from '@/utils/Confirm';
 import { CommentService } from '@/api/services/CommentService';
 import VideoCommentSend from './VideoCommentSend.vue';
+import type {Video} from "@/api/models/response/Video/Video";
+import type {VideoComment} from "@/api/models/response/VideoComment/VideoComment";
 
-const props = defineProps({
-    data: {
-        type: Object,
-        default: {},
-    },
-    replyLevel: {
-        //1:一级回复 2:二级回复
-        type: Number,
-        default: 1,
-    },
-})
-const videoInfo = inject('videoInfo')
+const props = defineProps<{
+  data: VideoComment,
+  //1:一级回复 2:二级回复
+  replyLevel: number,
+}>()
+
+const videoInfo = inject<Video>('videoInfo', {} as Video)
 const loginStore = userLoginStore();
 const route = useRoute()
 
@@ -95,24 +92,24 @@ const convertContent = (data: string) => {
     return data
 }
 
-const showReply = inject('showReply')
-const showReplyHandler = (item, replyLevel) => {
-    showReply(replyLevel === 1 ? item.commentId : item.pCommentId)
+const showReply = inject<(commentId: number) => void>('showReply')
+const showReplyHandler = (item: VideoComment, replyLevel: number) => {
+    showReply(replyLevel === 1 ? item.id : item.parentCommentId)
     nextTick(() => {
         const commentData = {
-            replyCommentId: item.commentId,
+            replyCommentId: item.id,
             nickName: item.nickName,
         }
         mitter.emit('initCommentData', commentData)
     })
 }
 
-const doLike = (data) => {
+const doLike = (data: VideoComment) => {
     doUserAction(
         {
-            videoId: route.params.videoId[0],
+            videoId: route.params.videoId as string,
             actionType: ACTION_TYPE.COMMENT_LIKE.value,
-            commentId: data.commentId,
+            commentId: data.id,
         },
         () => {
             if (data.hateCountActive) {
@@ -129,12 +126,12 @@ const doLike = (data) => {
         }
     )
 }
-const doHate = (data) => {
+const doHate = (data: VideoComment) => {
     doUserAction(
         {
-            videoId: route.params.videoId[0],
+            videoId: route.params.videoId as string,
             actionType: ACTION_TYPE.COMMENT_HATE.value,
-            commentId: data.commentId,
+            commentId: data.id,
         },
         () => {
             if (data.likeCountActive) {
@@ -157,14 +154,14 @@ const delComment = () => {
         message: '确定要删除评论',
         okfun: async () => {
             let result = await CommentService.deleteComment(
-                props.data.commentId
+                props.data.id
             )
             if (!result) {
                 return
             }
             mitter.emit('delCommentCallback', {
-                pCommentId: props.data.pCommentId,
-                commentId: props.data.commentId,
+                pCommentId: props.data.parentCommentId,
+                commentId: props.data.id,
             })
         },
     })
@@ -177,11 +174,11 @@ const topComment = () => {
             let result
             if (props.data.topType === 1) {
                 result = await CommentService.cancelTop(
-                    props.data.commentId
+                    props.data.id
                 )
             } else {
                 result = await CommentService.topComment(
-                    props.data.commentId
+                    props.data.id
                 )
             }
             if (!result) {

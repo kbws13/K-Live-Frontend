@@ -18,4 +18,7 @@ export type VideoComment = {
     children: VideoComment[],
     cover: string,
     videoName: string,
+    showReply?: boolean,
+    likeCountActive?: boolean,
+    hateCountActive?: boolean,
 }

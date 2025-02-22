@@ -16,7 +16,7 @@
                 <el-scrollbar height="400px" :max-height="playerHeight - 60">
                     <div :class="['danmu-item', item.id === selectDanmu.id ? 'active' : '']"
                         v-for="item in danmuList" @click="danmuSelect(item)">
-                        <div class="time">{{ proxy.Utils.convertSecondsToHMS(Math.round(item.time)) }}</div>
+                        <div class="time">{{ Local.convertSecondsToHMS(Math.round(item.time)) }}</div>
                         <div class="content" :title="item.text">
                             {{ item.text }}
                         </div>
@@ -34,6 +34,7 @@ import { ElScrollbar } from 'element-plus';
 import type { Danmu } from '@/api/models/response/Danmu/Danmu'
 import { mitter } from '@/event/eventBus'
 import { getCurrentInstance, onMounted, onUnmounted, ref } from 'vue'
+import Local from "web/src/utils/Local";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();
@@ -46,7 +47,8 @@ const danmuSelect = (item: Danmu) => {
 }
 
 onMounted(() => {
-    mitter.on('loadDanmu', (data) => {
+  // @ts-ignore
+    mitter.on('loadDanmu', (data: Danmu[]) => {
         data.sort(function (a, b) {
             return a.time - b.time
         })

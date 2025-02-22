@@ -8,6 +8,19 @@ import type {VideoQueryRequest} from "@/api/models/request/Video/VideoQueryReque
 import type {Page} from "@/common/Page";
 
 export class VideoService {
+
+    /**
+     * 获取推荐视频列表
+     */
+    public static async loadRecommendVideo(): Promise<Video[]> {
+        return await request<Video[]>({
+            url: Web.loadRecommendVideo,
+            method: "GET",
+            body: null,
+            dataType: "url",
+        })
+    }
+
     /**
      * 获取视频信息
      * @param videoId 视频id

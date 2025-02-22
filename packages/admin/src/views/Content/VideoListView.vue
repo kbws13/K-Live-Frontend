@@ -162,14 +162,19 @@ import type {Category} from "@/api/models/response/Category/Category";
 import type {VideoPostVO} from "@/api/models/response/VideoPost/VideoPostVO";
 import {VideoService} from "@/api/services/VideoService";
 
-const searchForm = ref({} as any);
+interface SearchForm {
+  videoName?: string;
+  categoryIdArray?: number[];
+  recommendType?: number;
+}
+const searchForm = ref<SearchForm>({});
 
 const tableData = ref({} as any);
 const tableOptions = ref({
   extHeight: 0,
 });
 
-const statusMap = {
+const statusMap: { [key: number]: string } = {
   0: "#e6a23c", //转码中
   1: "#f56c6c", //转码失败
   2: "#e6a23c", //待审核

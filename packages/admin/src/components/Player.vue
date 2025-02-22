@@ -105,10 +105,10 @@ const initPlayer = () => {
           color: "#fff",
           display: "none",
         },
-        click: function (...args) {
+        click: function () {
           changeWideScreen();
         },
-        mounted: function (...args) {
+        mounted: function () {
           //console.info('mounted', args)
         },
       },
@@ -178,7 +178,7 @@ defineExpose({
 
 onMounted(() => {
   mitter.on("changeP", (fileId) => {
-    player.switch = `/api/admin${Resource.videoResource}/${fileId}`;
+    player.switch = `/api/admin${Resource.videoResource}/${fileId}/`;
   });
 });
 

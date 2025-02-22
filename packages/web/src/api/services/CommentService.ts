@@ -4,10 +4,12 @@ import { Interact } from "../core/Url";
 import type { CommentAddRequest } from "../models/request/VideoComment/CommentAddRequest";
 import type { VideoComment } from "../models/response/VideoComment/VideoComment";
 import type { VideoCommentQuery } from "../models/request/VideoComment/VideoCommentQuery";
+import type {CommentLoadRequest} from "@/api/models/request/VideoComment/CommentLoadRequest";
+import type {VideoCommentResultVO} from "@/api/models/response/VideoComment/VideoCommentResultVO";
 
 export class CommentService {
     /**
-     * 加载评论
+     * 加载所有评论
      * @param videoCommentQuery 查询评论请求参数
      * @returns 评论数据（分页）
      */
@@ -19,6 +21,20 @@ export class CommentService {
             dataType: 'json'
         })
     }
+
+    /**
+     * 加载评论
+     * @param commentLoadRequest
+     */
+    public static async loadComment(commentLoadRequest: CommentLoadRequest): Promise<VideoCommentResultVO> {
+        return await request<VideoCommentResultVO>({
+            url: Interact.loadComment,
+            method: "POST",
+            body: commentLoadRequest,
+            dataType: "json",
+        })
+    }
+
     public static async addComment(commentAddRequest: CommentAddRequest): Promise<VideoComment> {
         return await request<VideoComment>({
             url: Interact.addComment,

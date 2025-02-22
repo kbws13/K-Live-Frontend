@@ -112,12 +112,12 @@ const getActualTimeStatisticsInfo = async () => {
     return
   }
   const totalCountInfo = result.totalCountInfo
-  const preDayData = result.preDayData
+  const preDayInfo = result.preDayInfo
 
   dataPartList.value.forEach((item) => {
     item.totalCount = totalCountInfo[item.totalCountKey]
-    item.preCount = preDayData[item.preDataType]
-        ? preDayData[item.preDataType]
+    item.preCount = (Object.keys(preDayInfo).length > 0 && preDayInfo[item.preDataType] !== undefined)
+        ? preDayInfo[item.preDataType]
         : 0
   })
 }
