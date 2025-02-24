@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts" setup>
+import "@/assets/scss/uhome.scss";
 import {ref} from "vue";
 import {useRoute} from "vue-router";
 import {HomeService} from "@/api/services/HomeService";
@@ -34,6 +35,7 @@ const loadVideoList = async () => {
   const result = await HomeService.loadVideoList({
     userId: route.params.userId as string,
     type: 0,
+    videoName: '',
   })
   if (!result) {
     return;

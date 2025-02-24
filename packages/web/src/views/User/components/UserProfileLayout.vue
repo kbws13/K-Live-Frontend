@@ -19,9 +19,8 @@
     }"
   >
     <div class="user-home-body">
-      <!-- <div class="header">
-        <img :src="proxy.Utils.getLocalImage('user-home-bg.png')" />
-      </div> -->
+      <div class="header">
+      </div>
       <div class="user-info-panel">
         <div class="avatar">
           <Avatar
@@ -170,19 +169,19 @@ const navList = ref([
     name: "主页",
     path: "/user/" + currentUserId,
     icon: "icon-home",
-    pathNames: ["uhome", "uhomeFans", "uhomeFocus"],
+    pathNames: ["userProfileHome", "userProfileFans", "userProfileFocus"],
   },
   {
     name: "投稿",
     path: "/user/" + currentUserId + "/video",
     icon: "icon-play",
-    pathNames: ["uhomeMyVideo"],
+    pathNames: ["userProfileMyVideo"],
   },
   {
     name: "视频列表",
     path: "/user/" + currentUserId + "/series",
     icon: "icon-playlist",
-    pathNames: ["uhomeSeries", "uhomeSeriesDetail"],
+    pathNames: ["userProfileSeries", "userProfileSeriesDetail"],
   },
   {
     name: "收藏",
@@ -311,7 +310,7 @@ const changeTheme = (theme: number) => {
     width: 1300px;
 
     .header {
-      height: 250px;
+      height: 100px;
       overflow: hidden;
     }
 
