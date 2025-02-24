@@ -41,7 +41,7 @@ import UserProfileVideoList from "@/views/User/UserProfileVideoList.vue";
 import UserProfileSeries from "@/views/User/UserProfileSeries.vue";
 import type {UserVO} from "@/api/models/response/User/UserVO";
 
-const userInfo = inject<UserVO>("userInfo");
+const userInfo = inject<UserVO>("userInfo", {} as UserVO);
 </script>
 
 <style lang="scss" scoped>

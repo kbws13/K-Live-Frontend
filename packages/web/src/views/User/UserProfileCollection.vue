@@ -10,9 +10,9 @@
       <template #default="{ data }">
         <div class="data-item">
           <div class="cover" @click="jump(data)">
-            <Cover :source="data.videoCover"></Cover>
+            <Cover :source="data.cover"></Cover>
           </div>
-          <div class="video-name" @click="jump(data)">{{ data.videoName||"已失效视频" }}</div>
+          <div class="video-name" @click="jump(data)">{{ data.name||"已失效视频" }}</div>
           <div class="collection-info">
             <div class="collection-time">
               收藏于： {{ Local.formatDate(data.actionTime) }}
@@ -51,9 +51,11 @@ const loginStore = userLoginStore()
 //是否是自己
 const myself = ref(loginStore.userInfo.id == route.params.userId)
 
-const dataSource = ref<Page<Action>>({} as Page<Action>)
+const dataSource = ref<Page<Action>>({
+  current: 1,
+} as Page<Action>)
 const loadVideoList = async () => {
-  const pageNo = dataSource.value.pageNo;
+  const pageNo = dataSource.value.current;
   const userId = route.params.userId as string
   const result = await InteractService.loadUserCollection(userId, pageNo);
   if (!result) {

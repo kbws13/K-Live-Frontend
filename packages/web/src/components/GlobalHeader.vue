@@ -45,7 +45,7 @@
             <div class="search-tag-list">
               <el-tag
                   v-for="tag in searchHistoryStore.searchHistory"
-                  :key="tag.name"
+                  :key="tag"
                   closable
                   type="info"
                   class="search-tag"

@@ -37,6 +37,8 @@ import {userLoginStore} from "@/stores/UserStore";
 import {onMounted, ref} from "vue";
 import Confirm from "@/utils/Confirm";
 import {MessageService} from "@/api/services/MessageService";
+import type {Page} from "@/common/Page";
+import type {Message} from "@/api/models/response/Message/Message";
 
 const router = useRouter()
 const route = useRoute()
@@ -73,7 +75,7 @@ const messageNav = ref([
   },
 ])
 
-const curMessageNav = ref({})
+const curMessageNav = ref({} as any)
 const selectMessageType = (item) => {
   readAll(item)
 
@@ -85,10 +87,10 @@ const selectMessageType = (item) => {
   loadDataList()
 }
 
-const dataSource = ref({})
+const dataSource = ref<Page<Message>>({} as Page<Message>)
 const loadDataList = async () => {
   let result = await MessageService.loadMessage({
-    current: dataSource.value.pageNo,
+    current: dataSource.value.current,
     messageType: curMessageNav.value.messageType,
   })
   if (!result) {
@@ -156,7 +158,7 @@ onMounted(() => {
   display: flex;
   height: calc(100vh - 180px);
   width: 1200px;
-  margin: 0px auto;
+  margin: 0 auto;
   .left-panel {
     background-image: url(../../assets/creation_bg.png);
     background-repeat: no-repeat;
