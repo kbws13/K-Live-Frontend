@@ -126,11 +126,11 @@ const initPlayer = () => {
                     return new Promise(async (resovle) => {
                         //是否展示弹幕
                         const danmuList = await loadDanmuList()
-                      const danmuku = danmuList.map(danmu => ({
-                        text: danmu.text, // 弹幕文本
-                        time: danmu.time || 0, // 弹幕时间，默认为 0 或当前时间
-                        color: danmu.color || '#FFFFFF', // 弹幕颜色，默认为白色
-                      }))
+                        const danmuku = danmuList.map(danmu => ({
+                          text: danmu.text, // 弹幕文本
+                          time: danmu.time || 0, // 弹幕时间，默认为 0 或当前时间
+                          color: danmu.color || '#FFFFFF', // 弹幕颜色，默认为白色
+                        }))
                         return resovle(danmuku)
                     })
                 },

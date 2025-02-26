@@ -10,10 +10,10 @@
       <div class="data-list">
         <LoadMoreList :dataSource="dataSource" :loading="loadingData" @loadData="loadDataList" layoutType="line">
           <template #default="{ data }">
-            <el-timeline-item :timestamp="proxy.Utils.formatDate(data.lastUpdateTime)" placement="top">
+            <el-timeline-item :timestamp="Local.formatDate(data.lastUpdateTime)" placement="top">
               <div class="history-item">
                 <div class="cover" @click="goDetail(data.videoId)">
-                  <Cover :source="data.videoCover"></Cover>
+                  <Cover :src="data.videoCover"></Cover>
                 </div>
                 <div class="video-info">
                   <div @click="goDetail(data.videoId)">
@@ -42,6 +42,7 @@ import Message from "@/utils/Message";
 import {VideoPlayHistoryService} from "@/api/services/VideoPlayHistoryService";
 import type {VideoPlayHistory} from "@/api/models/response/VideoPlayHistory/VideoPlayHistory";
 import type {Page} from "@/common/Page";
+import Local from "@/utils/Local";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance()
