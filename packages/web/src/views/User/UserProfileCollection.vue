@@ -10,9 +10,9 @@
       <template #default="{ data }">
         <div class="data-item">
           <div class="cover" @click="jump(data)">
-            <Cover :source="data.cover"></Cover>
+            <Cover :src="data.videoCover"></Cover>
           </div>
-          <div class="video-name" @click="jump(data)">{{ data.name||"已失效视频" }}</div>
+          <div class="video-name" @click="jump(data)">{{ data.videoName||"已失效视频" }}</div>
           <div class="collection-info">
             <div class="collection-time">
               收藏于： {{ Local.formatDate(data.actionTime) }}
