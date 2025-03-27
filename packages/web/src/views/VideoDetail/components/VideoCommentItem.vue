@@ -97,8 +97,9 @@ const showReplyHandler = (item: VideoComment, replyLevel: number) => {
     showReply(replyLevel === 1 ? item.id : item.parentCommentId)
     nextTick(() => {
         const commentData = {
-            replyCommentId: item.id,
+            replyCommentId: replyLevel === 1 ? item.id : item.parentCommentId,
             nickName: item.nickName,
+            replyUserId: item.userId,
         }
         mitter.emit('initCommentData', commentData)
     })

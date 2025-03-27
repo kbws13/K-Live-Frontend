@@ -85,6 +85,7 @@ const formData = ref({
     content: '',
     replyCommentId: null,
     videoId: '',
+    replyUserId: null,
 })
 const formDataRef = ref()
 
@@ -99,7 +100,7 @@ const selectFile = (file: any) => {
 const delImage = () => {
     formData.value.imgPath = null
 }
-const showReply = inject('showReply')
+const showReply = inject<any>('showReply')
 const submitComment = async (event: any) => {
     event.preventDefault()
 
