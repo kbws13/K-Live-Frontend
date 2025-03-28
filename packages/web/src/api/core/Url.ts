@@ -81,6 +81,7 @@ export const Web = {
     loadCommentByVideoId: "/web/createCenter/loadCommentByVideoId",
     changeVideoInteraction: "/web/createCenter/changeVideoInteraction",
     getVideoStatusCount: "/web/createCenter/getVideoStatusCount",
+    deleteVideo: "/web/createCenter/deleteVideo",
     // 系统设置
     getSystemSetting: "/web/systemSetting/getSystemSetting",
 

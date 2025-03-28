@@ -1,4 +1,3 @@
-import { useLoginStore } from '@/stores/UserStore'
 import Message from '@/utils/Message'
 import axios from 'axios'
 import VueCookies from 'vue-cookies'
@@ -38,14 +37,12 @@ instance.interceptors.response.use(
             return responseData;
         }
         // 正常请求
+        console.log("responseData: ", responseData)
         if (responseData.code == 0) {
             return responseData.data;
         } else if (responseData.code == 40000) {
             Message.error("请求参数错误");
         } else if (responseData.code == 40100) {
-            const loginState = useLoginStore();
-            // 登录超时
-            loginState.setLogin(true);
             return Promise.reject({ showError: false });
         }
         // TODO 其他错误码处理
@@ -75,7 +72,6 @@ const request = <T>(config: Api): Promise<T> => {
     }
     // @ts-ignore
     const token = VueCookies.get('token')
-    
     let headers = {
         'Content-Type': contentType,
         'X-Requested-With': 'XMLHttpRequest',

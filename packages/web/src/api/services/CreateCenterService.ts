@@ -80,4 +80,19 @@ export class CreateCenterService {
             dataType: "json",
         })
     }
+
+    /**
+     * 删除视频
+     * @param videoId
+     */
+    public static async deleteVideo(videoId: string): Promise<void> {
+        await request<void>({
+            url: Web.deleteVideo,
+            method: "POST",
+            body: {
+                "videoId": videoId,
+            },
+            dataType: "form",
+        })
+    }
 }

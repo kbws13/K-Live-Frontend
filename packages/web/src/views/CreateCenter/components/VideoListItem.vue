@@ -104,14 +104,12 @@
 <script lang="ts" setup>
 import { ElPopover, ElCheckbox, ElCheckboxGroup } from "element-plus"
 import Local from "web/src/utils/Local";
-import {getCurrentInstance, ref} from "vue";
+import {ref} from "vue";
 import {useRouter} from "vue-router";
 import Confirm from "@/utils/Confirm";
 import Message from "@/utils/Message";
 import {CreateCenterService} from "@/api/services/CreateCenterService";
 
-// @ts-ignore
-const { proxy } = getCurrentInstance();
 const router = useRouter();
 
 //status   (0, "转码中"),  (1, "转码失败"), (2, "待审核"), (3, "审核成功"), (4, "审核不通过");
@@ -125,7 +123,7 @@ const interactionInfo = ref(
     props.data.interaction ? props.data.interaction.split(",") : []
 );
 const saveInteractionInfo = async (e: []) => {
-  let result = await CreateCenterService.changeVideoInteraction(props.data.videoId,e.join(","));
+  let result = await CreateCenterService.changeVideoInteraction(props.data.id,e.join(","));
   if (!result) {
     return;
   }
@@ -138,7 +136,7 @@ const jumpUrl = {
 };
 
 const jump = (type: keyof typeof jumpUrl) => {
-  router.push(`${jumpUrl[type]}?videoId=${props.data.videoId}`);
+  router.push(`${jumpUrl[type]}?videoId=${props.data.id}`);
 };
 
 const emit = defineEmits(["reload"]);
@@ -146,15 +144,7 @@ const deleteVideo = () => {
   Confirm({
     message: `确定要删除【${props.data.videoName}】吗？`,
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.ucDeleteVideo,
-        params: {
-          videoId: props.data.videoId,
-        },
-      });
-      if (!result) {
-        return;
-      }
+      await CreateCenterService.deleteVideo(props.data.id);
       Message.success("删除成功");
       emit("reload");
     },

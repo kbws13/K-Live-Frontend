@@ -43,16 +43,15 @@
 
 <script lang="ts" setup>
 import {ElButton, ElForm, ElFormItem, ElInput} from "element-plus"
-import {getCurrentInstance, ref} from "vue";
+import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {md5} from "js-md5";
 import Message from "web/src/utils/Message";
 import {userLoginStore} from "web/src/stores/UserStore";
 import type {UserLoginRequest} from "@/api/models/request/User/UserLoginRequest";
 import {UserService} from "@/api/services/UserService";
+import VueCookies from "vue-cookies";
 
-// @ts-ignore
-const { proxy } = getCurrentInstance();
 const loginStore = userLoginStore();
 const router = useRouter();
 
@@ -80,7 +79,8 @@ const doSubmit = async () => {
   Message.success('登录成功');
   loginStore.setLogin(false);
   loginStore.saveUserInfo(res);
-  proxy.VueCookies.set("token", res.token);
+  // @ts-ignore
+  VueCookies.set("token", res.token);
   await router.push("/home");
 };
 </script>
