@@ -93,7 +93,8 @@ const imageList = computed(() => {
   if (props.src instanceof File) {
     return;
   }
-  const sourceImage = Resource.getResource + props.src!.replace(imageThumbnailSuffix, '');
+  const sourceImage = "/api" + Resource.getResource + props.src!.replace(imageThumbnailSuffix, '');
+  console.log("sourceImage: ", sourceImage)
   return [sourceImage];
 })
 

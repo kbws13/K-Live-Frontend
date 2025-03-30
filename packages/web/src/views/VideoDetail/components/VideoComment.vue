@@ -83,11 +83,11 @@ const loadCommentList = async () => {
   const userActionMap: Record<number, any> = {};
   const userActionList = result.actionList;
   userActionList.forEach((item) => {
-    userActionMap[item.id] = item;
+    userActionMap[item.commentId] = item;
   });
   const commentData = result.page;
   commentData.records.forEach((item) => {
-    setCommentActive(userActionMap, item);
+    item = setCommentActive(userActionMap, item);
     if (item.children) {
       item.children.forEach((sub) => {
         setCommentActive(userActionMap, sub);
@@ -112,6 +112,7 @@ const setCommentActive = (userActionMap: Record<number, any>, item: VideoComment
       item.hateCountActive = true;
     }
   }
+  return item;
 };
 
 onMounted(() => {

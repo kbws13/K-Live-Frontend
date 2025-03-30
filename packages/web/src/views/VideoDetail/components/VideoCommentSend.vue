@@ -14,7 +14,7 @@
                             :rows="1" type="textarea" resize="none" :show-word-limit="true" :maxlength="500"
                             :autosize="{ minRows: 1, maxRows: 5 }"></el-input>
                         <div class="comment-image" v-if="formData.imgPath">
-                            <Cover fit="cover" :source="formData.imgPath"></Cover>
+                            <Cover fit="cover" :src="formData.imgPath"></Cover>
                             <span class="del iconfont icon-close" @click="delImage"></span>
                         </div>
                     </el-form-item>
@@ -109,15 +109,15 @@ const submitComment = async (event: any) => {
         return
     }
 
-    const params =
-        props.sendType === 0
-            ? {
-                content: formData.value.content,
-                imgPath: formData.value.imgPath,
-            }
-            : Object.assign({}, formData.value)
+  const params =
+      props.sendType === 0
+          ? {
+            content: formData.value.content,
+            imgPath: formData.value.imgPath,
+          }
+          : Object.assign({}, formData.value);
 
-    if (!params.content) {
+  if (!params.content) {
         Message.warning('请输入评论')
         return
     }

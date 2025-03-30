@@ -17,7 +17,7 @@
                 <span v-html="convertContent(data.content)"></span>
             </div>
             <div v-if="data.imgPath" class="image-show">
-                <Cover :source="data.imgPath + imageThumbnailSuffix" :preview="true" fit="cover"></Cover>
+                <Cover :src="data.imgPath + imageThumbnailSuffix" :preview="true" fit="cover"></Cover>
             </div>
             <div class="comment-op">
                 <div class="op-left">

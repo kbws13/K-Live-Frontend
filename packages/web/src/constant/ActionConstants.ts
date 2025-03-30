@@ -1,7 +1,7 @@
 const ACTION_TYPE = {
     COMMENT_LIKE: {
         value: 0,
-        desc: "评论喜欢点赞"
+        desc: "评论点赞"
     },
     COMMENT_HATE: {
         value: 1,
