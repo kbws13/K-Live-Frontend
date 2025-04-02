@@ -54,7 +54,7 @@ export class VideoService {
      */
     public static async deleteVideo(videoId: string): Promise<void> {
         return await request<void>({
-            url: Admin.recommendVideo,
+            url: Admin.deleteVideo,
             method: "POST",
             body: {
                 videoId: videoId,

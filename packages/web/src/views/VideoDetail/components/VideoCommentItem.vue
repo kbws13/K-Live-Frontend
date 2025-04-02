@@ -75,6 +75,7 @@ import { CommentService } from '@/api/services/CommentService';
 import VideoCommentSend from './VideoCommentSend.vue';
 import type {Video} from "@/api/models/response/Video/Video";
 import type {VideoComment} from "@/api/models/response/VideoComment/VideoComment";
+import Message from "@/utils/Message";
 
 const props = defineProps<{
   data: VideoComment,
@@ -154,12 +155,13 @@ const delComment = () => {
     Confirm({
         message: '确定要删除评论',
         okfun: async () => {
-            let result = await CommentService.deleteComment(
+            const result = await CommentService.deleteComment(
                 props.data.id
             )
             if (!result) {
                 return
             }
+            Message.success("删除成功");
             mitter.emit('delCommentCallback', {
                 pCommentId: props.data.parentCommentId,
                 commentId: props.data.id,

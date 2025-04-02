@@ -47,7 +47,7 @@
 
       <template #slotVideo="{ index, row }">
         <a :href="`${proxy.webDomain}/video/${row.videoId}`" target="_blank" class="a-link">
-          <Cover :source="row.videoCover"></Cover>
+          <Cover :source="row.cover"></Cover>
           <div class="video-name">{{ row.videoName }}</div>
         </a>
       </template>
