@@ -78,7 +78,7 @@ export const Web = {
     loadVideoPost: "/web/createCenter/loadVideoPost",
     addPostVideo: "/web/createCenter/addPostVideo",
     getVideoInfoById: "/web/createCenter/getVideoInfoById",
-    loadCommentByVideoId: "/web/createCenter/loadCommentByVideoId",
+    loadCommentByVideoId: "/web/createCenter/loadComment",
     changeVideoInteraction: "/web/createCenter/changeVideoInteraction",
     getVideoStatusCount: "/web/createCenter/getVideoStatusCount",
     deleteVideo: "/web/createCenter/deleteVideo",

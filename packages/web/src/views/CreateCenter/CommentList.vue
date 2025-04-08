@@ -69,7 +69,8 @@ import VideoSearchSelect from "@/views/CreateCenter/VideoSearchSelect.vue";
 import {imageThumbnailSuffix} from "@/constant/ResourceConstant";
 import {getCurrentInstance, ref} from "vue";
 import {useRoute} from "vue-router";
-import {Web} from "@/api/core/Url";
+import {CommentService} from "@/api/services/CommentService";
+import type {CommentLoadRequest} from "@/api/models/request/VideoComment/CommentLoadRequest";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();
@@ -104,14 +105,11 @@ const loadDataList = async () => {
     pageSize: tableData.value.pageSize,
     videoId: currentVideoId.value,
   };
-  let result = await proxy.Request({
-    url: Web.loadCommentByVideoId,
-    params: params,
-  });
+  let result = await CommentService.loadComment(params as CommentLoadRequest);
   if (!result) {
     return;
   }
-  Object.assign(tableData.value, result.data);
+  Object.assign(tableData.value, result.page);
 };
 
 const delComment = (commentId: number) => {
