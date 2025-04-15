@@ -52,6 +52,11 @@ defineProps({
 </script>
 
 <style scoped>
+
+:deep(.highlight) {
+  color: red !important;
+}
+
 .video-item {
     width: 100%;
     overflow: hidden;

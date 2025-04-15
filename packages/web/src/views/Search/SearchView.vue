@@ -91,19 +91,19 @@ const dataSource = ref({})
 const loadDataList = async () => {
   const orderTypeBtn = orderButtons.value.find((item) => {
     return route.query.order == item.order
-  })
+  });
 
   loadingData.value = true
 
   const keyword = route.query.keyword as string;
-  const orderType = orderTypeBtn!.orderType as number;
-  const current  = dataSource.value.pageNo
+  const orderType = orderTypeBtn?.orderType as number ?? '';
+  const current  = dataSource.value?.current ?? 1;
   let result = await VideoService.searchVideo(keyword, orderType, current)
   loadingData.value = false
   if (!result) {
     return
   }
-
+  console.log(result)
   dataSource.value = result
 }
 
@@ -121,9 +121,10 @@ const goDetail = (videoId: string) => {
 }
 
 watch(
-    () => route.query.keyword,
+    () => route.fullPath,
     (newVal) => {
       if (newVal) {
+        console.log("触发加载数据")
         loadDataList()
         searchHistoryStore.addHistory(newVal as string)
       }

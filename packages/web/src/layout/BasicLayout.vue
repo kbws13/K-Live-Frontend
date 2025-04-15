@@ -7,7 +7,7 @@
         : Local.getLocalImage('banner_bg.png')
         })`,
     }">
-      <GlobalHeader theme="light" />
+      <GlobalHeader theme="light" :hotSearchList="hotSearchList" />
     </div>
     <div class="header-fixed" v-show="(navigatorStore.fixedHeader && showFixedHeader) ||
       navigatorStore.forceFixedHeader
@@ -15,7 +15,7 @@
         'max-width': proxy.bodyMaxWidth + 'px',
         'min-width': proxy.bodyMinWidth + 'px',
       }">
-      <GlobalHeader theme="dark" />
+      <GlobalHeader theme="dark" :hotSearchList="hotSearchList" />
     </div>
     <div class="category-fixed" v-show="navigatorStore.fixedCategory && showFixedCategory" :style="{
       'max-width': proxy.bodyMaxWidth + 'px',
@@ -59,6 +59,7 @@ import { useNavigatorStore } from '@/stores/NavigatorStore';
 import { mitter } from '@/event/eventBus';
 import { Resource } from '@/api/core/Url';
 import Local from '@/utils/Local';
+import {VideoService} from "@/api/services/VideoService";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();
@@ -108,6 +109,17 @@ const backgroundImage = computed(() => {
     return null
   }
 })
+
+//热搜
+const hotSearchList = ref<string[]>([])
+const getSearchKeywordTop = async () => {
+  const result = await VideoService.getSearchKeywordTop();
+  if (!result) {
+    return
+  }
+  hotSearchList.value = result
+}
+getSearchKeywordTop()
 
 onBeforeMount(() => {
   loadCategory();

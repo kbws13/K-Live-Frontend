@@ -125,4 +125,16 @@ export class VideoService {
             dataType: "url",
         })
     }
+
+    /**
+     * 获取搜索热词
+     */
+    public static async getSearchKeywordTop(): Promise<string[]> {
+        return await request({
+            url: Web.getSearchKeywordTop,
+            method: "GET",
+            body: null,
+            dataType: "url",
+        })
+    }
 }

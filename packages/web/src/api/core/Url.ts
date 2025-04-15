@@ -52,6 +52,8 @@ export const Web = {
     loadHotVideoList: "/web/video/loadHotVideoList",
     searchVideo: "/web/video/searchVideo",
     loadRecommendVideo: "/web/video/loadRecommendVideo",
+    // 搜索热词
+    getSearchKeywordTop: "/web/video/getSearchKeywordTop",
     // 合集
     loadSeries: "/web/series/loadSeries",
     loadSeriesWithVideo: "/web/series/loadSeriesWithVideo",
