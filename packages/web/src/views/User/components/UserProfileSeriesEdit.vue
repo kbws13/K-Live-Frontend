@@ -136,14 +136,13 @@ const submit = () => {
       return
     }
     params.videoIds = params.videoIds.join(',')
-    let result = await proxy.Request({
-      url:
-          opType.value == 2
-              ? proxy.Api.uHomeSeriesSaveSeriesVideo
-              : proxy.Api.uHomeSeriesSaveVideoSeries,
-      params,
-    })
-    if (!result) {
+    let res;
+    if(opType.value == 2) {
+      res = await SeriesService.addSeries(params);
+    } else {
+      res = await SeriesService.updateSeries(params)
+    }
+    if (!res) {
       return
     }
     Message.success('保存成功')

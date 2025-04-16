@@ -1,34 +1,31 @@
 <template>
-  <div class="my-video-list-title" v-if="seriesList.length > 0">
-    <router-link class="title" :to="`/user/${route.params.userId}/series`"
-    >我的视频列表</router-link
+  <div class="video-list-panel">
+    <div class="video-title">视频列表</div>
+    <VueDraggable
+      v-model="seriesList"
+      @Update="changeSort"
+      handle=".move-handler"
+      class="video-list"
+      draggable=".list-item"
     >
-    <span
-        class="iconfont icon-add op-btn new-btn"
-        @click="showVideoSeries"
-        v-if="myself"
-    >新建</span
-    >
-  </div>
-  <div class="part-item" v-for="item in seriesList">
-    <div class="part-title">
-      <div class="title-panel">
-        <router-link
-            class="title"
-            :to="`/user/${route.params.userId}/series/${item.id}`"
-        >{{ item.name }}
-        </router-link>
-        <div class="count-info">{{ item.videoList.length }}</div>
-      </div>
-      <router-link
-          class="op-btn"
-          :to="`/user/${route.params.userId}}/series/${item.id}`"
-      >更多&gt;</router-link
-      >
-    </div>
-    <div class="video-list5">
-      <VideoItem :data="video" v-for="video in item.videoList"> </VideoItem>
-    </div>
+      <template v-for="item in seriesList">
+        <div class="video-item-add" @click="showVideoSeries" v-if="item.id == -1">
+          <div class="iconfont icon-add"></div>
+          <div class="add-info">新建视频列表</div>
+        </div>
+        <div class="list-item" v-else @click="jump(item)">
+          <div class="cover">
+            <div class="move-handler iconfont icon-move" v-if="myself"></div>
+            <Cover :src="item.cover"></Cover>
+          </div>
+          <div class="item-name">{{item.name}}</div>
+          <div class="create-time">
+            {{ Local.formatDate(item.updateTime) }}
+          </div>
+        </div>
+      </template>
+    </VueDraggable>
+    <NoData v-if="seriesList.length == 0" msg="暂无视频列表"></NoData>
   </div>
   <UserProfileSeriesEdit
       ref="videoSeriesEditRef"
@@ -37,16 +34,21 @@
 </template>
 
 <script lang="ts" setup>
-
+import { VueDraggable } from "vue-draggable-plus";
 import {userLoginStore} from "@/stores/UserStore";
 import {computed, ref} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {SeriesService} from "@/api/services/SeriesService";
 import type {Series} from "@/api/models/response/Series/Series";
 import UserProfileSeriesEdit from "@/views/User/components/UserProfileSeriesEdit.vue";
+import Message from "@/utils/Message";
+import Cover from "@/components/Cover.vue";
+import Local from "web/src/utils/Local";
+import NoData from "@/components/NoData.vue";
 
 const loginStore = userLoginStore();
 const route = useRoute();
+const router = useRouter();
 //是否是自己
 const myself = computed(() => {
   return loginStore.userInfo.id == route.params.userId;
@@ -60,6 +62,11 @@ const loadSeriesList = async () => {
     return;
   }
   seriesList.value = result;
+  if(myself) {
+    seriesList.value.unshift({
+      id: -1
+    } as Series)
+  }
 };
 loadSeriesList();
 
@@ -67,20 +74,82 @@ const videoSeriesEditRef = ref();
 const showVideoSeries = () => {
   videoSeriesEditRef.value.show();
 };
+
+const changeSort = async () => {
+  let seriesIds = seriesList.value.map((item) => {
+    return item.id;
+  });
+  seriesIds.splice(0, 1);
+  let result = await SeriesService.changeSeriesSort(seriesIds.join(","));
+  if (!result) {
+    return;
+  }
+  Message.success("排序成功");
+};
+
+const jump = (item: Series) => {
+  router.push(`/user/${route.params.userId}/series/${item.id}`);
+};
 </script>
 
 <style lang="scss" scoped>
-.my-video-list-title {
-  margin-top: 15px;
-  .title {
-    text-decoration: none;
-    color: var(--text);
-    font-size: 16px;
+.video-list-panel {
+  padding: 20px;
+  border-radius: 5px;
+  background: #fff;
+  .video-title {
+    font-size: 18px;
   }
-  .new-btn {
-    margin-left: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
+  .video-list {
+    margin-top: 20px;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(6, 1fr);
+    .video-item-add {
+      border-radius: 5px;
+      width: 100%;
+      height: 150px;
+      border: 2px dashed #ddd;
+      text-align: center;
+      color: var(--text3);
+      cursor: pointer;
+      .icon-add {
+        font-size: 40px;
+        padding-top: 40px;
+      }
+    }
+    .list-item {
+      .cover {
+        position: relative;
+        .move-handler {
+          width: 100%;
+          height: 30px;
+          cursor: move;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: #fff;
+          z-index: 100;
+          border-radius: 5px 5px 0 0;
+          border: 1px solid #ddd;
+          align-items: center;
+          justify-content: center;
+          display: none;
+        }
+        &:hover {
+          .move-handler {
+            display: flex;
+          }
+        }
+      }
+      .list-name {
+        margin-top: 5px;
+      }
+      .create-time {
+        margin-top: 5px;
+        color: var(--text3);
+      }
+    }
   }
 }
 
