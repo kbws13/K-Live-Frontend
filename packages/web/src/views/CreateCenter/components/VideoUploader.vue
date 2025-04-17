@@ -174,12 +174,13 @@ mitter.on('startUpload', () => {
 })
 
 const addFile = (file: any) => {
+  console.log("file", file)
   file = file.file;
   if (fileList.value.length >= systemSettingStore.sysSetting.videoPCount) {
     Message.warning('最多可以添加' + systemSettingStore.sysSetting.videoPCount + '个视频');
     return
   }
-
+  console.log("file.file: ", file.file)
   let fileName = file.name
   console.log("fileName: ", fileName)
   const lastPoint = fileName.lastIndexOf('.')
@@ -231,8 +232,7 @@ const addFile = (file: any) => {
 
 // 处理 ElUpload 组件的 http-request 事件
 const handleAddFile = (options: any) => {
-  const file = options.file;
-  addFile(file);
+  addFile(options);
   return Promise.resolve(null); // 返回 Promise，解决类型错误
 };
 
@@ -385,11 +385,11 @@ const getUploadFileList = () => {
   }
 
   if (failCount > 0) {
-    proxy.Message.warning('请删除上传失败的文件')
+    Message.warning('请删除上传失败的文件')
     return null
   }
   if (noUploadCount > 0) {
-    proxy.Message.warning('文件还未上传完成无法提交')
+    Message.warning('文件还未上传完成无法提交')
     return null
   }
   return fileList.value.map((item) => {

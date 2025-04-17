@@ -11,10 +11,10 @@ import { inject, ref } from 'vue';
 
 const dataList = ref<Video[]>([]);
 
-const videoInfo = inject("videoInfo");
+const videoInfo = inject<Video>("videoInfo", {} as Video);
 
 const loadDataList = async () => {
-  let result = await VideoService.getRecommendVideo(videoInfo.value.videoName, videoInfo.value.videoId,)
+  let result = await VideoService.getRecommendVideo(videoInfo.value.name, videoInfo.value.id,);
   if (!result) {
     return;
   }
