@@ -38,7 +38,7 @@
       </template>
 
       <template #slotJoinTime="{ index, row }">
-        <div>加入时间：{{ row.joinTime }}</div>
+        <div>加入时间：{{ row.createTime }}</div>
         <div>最后登录时间：{{ row.lastLoginTime }}</div>
       </template>
 
