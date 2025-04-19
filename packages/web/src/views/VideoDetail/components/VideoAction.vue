@@ -26,6 +26,7 @@
 import { useRoute } from 'vue-router';
 import VideoCoin from './VideoCoin.vue';
 import {inject, ref} from 'vue';
+import type {Ref} from 'vue';
 import { userLoginStore } from '@/stores/UserStore';
 import { doUserAction } from '@/api';
 import { ACTION_TYPE } from '@/constant/ActionConstants';
@@ -33,7 +34,7 @@ import type {Video} from "@/api/models/response/Video/Video";
 import Message from "@/utils/Message";
 
 const route = useRoute();
-const videoInfo = inject<Video>("videoInfo", {} as Video);
+const videoInfo = inject<Ref<Video>>("videoInfo", {});
 const loginStore = userLoginStore();
 
 
@@ -49,20 +50,20 @@ const userAction = (type: keyof typeof ACTION_TYPE) => {
     },
     () => {
       if (type === "VIDEO_LIKE") {
-        if (videoInfo.likeCountActive) {
-          videoInfo.likeCountActive = false;
-          videoInfo.likeCount--;
+        if (videoInfo.value.likeCountActive) {
+          videoInfo.value.likeCountActive = false;
+          videoInfo.value.likeCount--;
         } else {
-          videoInfo.likeCountActive = true;
-          videoInfo.likeCount++;
+          videoInfo.value.likeCountActive = true;
+          videoInfo.value.likeCount++;
         }
       } else if (type === "VIDEO_COLLECT") {
-        if (videoInfo.collectCountActive) {
-          videoInfo.collectCountActive = false;
-          videoInfo.collectCount--;
+        if (videoInfo.value.collectCountActive) {
+          videoInfo.value.collectCountActive = false;
+          videoInfo.value.collectCount--;
         } else {
-          videoInfo.collectCountActive = true;
-          videoInfo.collectCount++;
+          videoInfo.value.collectCountActive = true;
+          videoInfo.value.collectCount++;
         }
       }
     }
@@ -75,7 +76,7 @@ const userActionCoin = () => {
     loginStore.setLogin(true);
     return;
   }
-  if (videoInfo.coinCountActive) {
+  if (videoInfo.value.coinCountActive) {
     Message.warning("对本稿件的投币枚数已用完");
     return;
   }

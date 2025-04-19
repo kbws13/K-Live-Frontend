@@ -97,7 +97,7 @@ export class SeriesService {
      * 获取所有视频
      * @param seriesId
      */
-    public static async loadAllVideo(seriesId: number): Promise<Video[]> {
+    public static async loadAllVideo(seriesId?: string): Promise<Video[]> {
         return await request<Video[]>({
             url: Web.loadAllVideoSeries,
             method: "GET",

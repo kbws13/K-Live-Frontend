@@ -48,7 +48,7 @@ const videoInfo = inject<Video>('videoInfo', {} as Video)
 const submitCoin = () => {
   doUserAction(
     {
-      videoId: route.params.videoId[0],
+      videoId: route.params.videoId as string,
       actionType: ACTION_TYPE.VIDEO_COIN.value,
       count: coinCount.value,
     },

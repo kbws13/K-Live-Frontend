@@ -16,7 +16,7 @@
         <div class="list-item" v-else @click="jump(item)">
           <div class="cover">
             <div class="move-handler iconfont icon-move" v-if="myself"></div>
-            <Cover :src="item.cover"></Cover>
+            <Cover :src="item.videoList[0].cover"></Cover>
           </div>
           <div class="item-name">{{item.name}}</div>
           <div class="create-time">
@@ -72,7 +72,7 @@ loadSeriesList();
 
 const videoSeriesEditRef = ref();
 const showVideoSeries = () => {
-  videoSeriesEditRef.value.show();
+  videoSeriesEditRef.value.show({}, 0);
 };
 
 const changeSort = async () => {

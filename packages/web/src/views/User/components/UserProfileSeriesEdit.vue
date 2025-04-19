@@ -5,13 +5,13 @@
       <!--input输入-->
       <template v-if="step == 1">
         <el-form-item label="列表名称" prop="seriesName">
-          <el-input clearable placeholder="请填写名称" v-model="formData.seriesName" :maxlength="100"
+          <el-input clearable placeholder="请填写名称" v-model="formData.name" :maxlength="100"
                     show-word-limit></el-input>
         </el-form-item>
         <!--textarea输入-->
         <el-form-item label="列表简介" prop="">
           <el-input clearable placeholder="请填写简介（选填）" type="textarea" :rows="5" :maxlength="200" show-word-limit
-                    resize="none" v-model="formData.seriesDescription"></el-input>
+                    resize="none" v-model="formData.description"></el-input>
         </el-form-item>
       </template>
       <template v-if="step == 2">
@@ -19,10 +19,10 @@
           <el-checkbox-group v-model="formData.videoIds">
             <div class="video-item" v-for="item in videoList">
               <div class="check">
-                <el-checkbox :value="item.id" />
+                <el-checkbox :value="item.id"/>
               </div>
               <div class="cover">
-                <Cover :source="item.cover"></Cover>
+                <Cover :src="item.cover"></Cover>
               </div>
               <div class="video-info">
                 <div class="video-name">{{ item.name }}</div>
@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ElButton, ElForm, ElFormItem, ElInput, ElScrollbar, ElCheckboxGroup, ElCheckbox } from "element-plus"
+import {ElButton, ElForm, ElFormItem, ElInput, ElScrollbar, ElCheckboxGroup, ElCheckbox} from "element-plus"
 import Local from "web/src/utils/Local";
 import {useRoute} from "vue-router";
 import {nextTick, ref} from "vue";
@@ -77,11 +77,11 @@ const formData = ref({
 })
 const formDataRef = ref()
 const rules = {
-  seriesName: [{ required: true, message: '请输入名称' }],
+  name: [{required: true, message: '请输入名称'}],
 }
 
 const show = (data = {}, _opType = 0) => {
-  loadVideoList()
+  loadVideoList();
 
   opType.value = _opType
   if (_opType === 0 || _opType == 1) {
@@ -138,7 +138,7 @@ const submit = () => {
     params.videoIds = params.videoIds.join(',')
     let res;
     if(opType.value == 2) {
-      res = await SeriesService.addSeries(params);
+      res = await SeriesService.saveSeriesContent(params.id, params.videoIds);
     } else {
       res = await SeriesService.updateSeries(params)
     }
@@ -153,8 +153,9 @@ const submit = () => {
 
 const videoList = ref<Video[]>([])
 const loadVideoList = async () => {
-  const seriesId = route.params.seriesId as string
-  const result = await SeriesService.loadAllVideo(Number(seriesId));
+  const seriesId = route.params.seriesId as string;
+  console.log(seriesId)
+  const result = await SeriesService.loadAllVideo(seriesId == undefined ? '' : seriesId)
   if (!result) {
     return
   }
@@ -166,35 +167,43 @@ const loadVideoList = async () => {
 .op-btns {
   text-align: right;
 }
+
 .video-item {
   display: flex;
   margin-bottom: 10px;
   padding-right: 15px;
   align-items: center;
+
   .check {
     width: 30px;
   }
+
   .cover {
     width: 100px;
   }
+
   .video-info {
     flex: 1;
     margin-left: 5px;
     min-width: 0;
+
     .video-name {
       width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+
     .play-info {
       margin-top: 5px;
       font-size: 13px;
       color: var(--text3);
       display: flex;
       justify-content: space-between;
+
       .iconfont {
         font-size: 13px;
+
         &::before {
           font-size: 16px;
           margin-right: 3px;
@@ -203,6 +212,7 @@ const loadVideoList = async () => {
     }
   }
 }
+
 :deep(.el-checkbox-group) {
   font-size: 13px;
   line-height: normal;

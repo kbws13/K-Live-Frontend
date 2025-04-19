@@ -4,4 +4,5 @@ export type CommentLoadRequest = {
     videoId: string,
     videoName?: string,
     orderType?: number,
+    loadChildren?: boolean,
 } & PageRequest

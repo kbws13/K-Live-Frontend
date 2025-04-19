@@ -14,6 +14,8 @@ export const uploadImage = async (file: File, createThumbnail = false) => {
 }
 
 export const doUserAction = async (actionDoRequest: ActionDoRequest, callback: Function) => {
-    await InteractService.doAction(actionDoRequest);
-    callback()
+    const res = await InteractService.doAction(actionDoRequest);
+    if(res) {
+        callback()
+    }
 }

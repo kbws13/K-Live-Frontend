@@ -9,7 +9,7 @@
         :options="tableOptions"
         :extHeight="tableOptions.extHeight"
     >
-      <template #slotComment="{ index, row }">
+      <template #slotComment="{ row }">
         <div class="comment-info">
           <Avatar :avatar="row.avatar" :userId="row.userId"></Avatar>
           <div class="comment">
@@ -34,7 +34,7 @@
             <div class="content">{{ row.content }}</div>
             <div v-if="row.imgPath" class="image-show">
               <Cover
-                  :source="row.imgPath + imageThumbnailSuffix"
+                  :src="row.imgPath + imageThumbnailSuffix"
                   :preview="true"
                   fit="cover"
               ></Cover>
@@ -43,20 +43,20 @@
               <div class="time">{{ row.postTime }}</div>
               <div
                   class="iconfont icon-delete"
-                  @click="delComment(row.commentId)"
+                  @click="delComment(row.id)"
               ></div>
             </div>
           </div>
         </div>
       </template>
 
-      <template #slotVideo="{ index, row }">
+      <template #slotVideo="{ row }">
         <router-link
             :to="`/video/${row.videoId}`"
             target="_blank"
             class="a-link"
         >
-          <Cover :source="row.videoCover"></Cover>
+          <Cover :src="row.cover"></Cover>
           <div class="video-name">{{ row.videoName }}</div>
         </router-link>
       </template>
@@ -67,13 +67,13 @@
 import Table from "@/components/Table.vue";
 import VideoSearchSelect from "@/views/CreateCenter/VideoSearchSelect.vue";
 import {imageThumbnailSuffix} from "@/constant/ResourceConstant";
-import {getCurrentInstance, ref} from "vue";
+import {ref} from "vue";
 import {useRoute} from "vue-router";
 import {CommentService} from "@/api/services/CommentService";
 import type {CommentLoadRequest} from "@/api/models/request/VideoComment/CommentLoadRequest";
+import Confirm from "@/utils/Confirm";
+import Message from "@/utils/Message";
 
-// @ts-ignore
-const { proxy } = getCurrentInstance();
 const route = useRoute();
 const currentVideoId = ref(route.query.videoId as string);
 const loadData4VideoSelect = (videoId: string) => {
@@ -97,13 +97,17 @@ const tableInfoRef = ref();
 const tableOptions = ref({
   extHeight: 10,
 });
-const tableData = ref({});
+const tableData = ref({
+  current: 1,
+  pageSize: 20,
+});
 // TODO
 const loadDataList = async () => {
   let params = {
-    pageNo: tableData.value.pageNo,
+    pageNo: tableData.value.current,
     pageSize: tableData.value.pageSize,
     videoId: currentVideoId.value,
+    loadChildren: false,
   };
   let result = await CommentService.loadComment(params as CommentLoadRequest);
   if (!result) {
@@ -113,19 +117,14 @@ const loadDataList = async () => {
 };
 
 const delComment = (commentId: number) => {
-  proxy.Confirm({
+  Confirm({
     message: "确定要删除吗？",
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.ucDelComment,
-        params: {
-          commentId,
-        },
-      });
+      let result = await CommentService.deleteComment(commentId);
       if (!result) {
         return;
       }
-      proxy.Message.success("删除成功");
+      Message.success("删除成功");
       await loadDataList();
     },
   });
@@ -162,6 +161,6 @@ const delComment = (commentId: number) => {
   width: 100px;
   height: 100px;
   overflow: hidden;
-  margin: 5px 0px;
+  margin: 5px 0;
 }
 </style>

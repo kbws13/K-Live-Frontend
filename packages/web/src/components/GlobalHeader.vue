@@ -4,10 +4,9 @@
       <el-popover :width="categoryPartCount * (150 + 21) + 24" trigger="hover" :show-arrow="false" :offset="22"
                   placement="bottom-start">
         <template #reference>
-          <router-link class="iconfont icon-logo menu-item" to="/"
-          >首页
-          </router-link
-          >
+          <router-link class="iconfont icon-logo menu-item" to="/">
+            首页
+          </router-link>
         </template>
         <div class="nav-list">
           <div class="nav-part" v-for="index in categoryPartCount">
@@ -16,7 +15,7 @@
                             (index - 1) * partCount + partCount
                         )" :to="`/v/${item.code}`">
                             <span class="icon" v-if="item.icon">
-                                <img :src="`${Resource.getResource}${item.icon}`" alt=""/>
+                                <img :src="`/api${Resource.getResource}${item.icon}`" alt=""/>
                             </span>
               <span class="category-name">{{ item.name }}</span>
             </router-link>
@@ -144,6 +143,7 @@ import Message from '@/utils/Message';
 import {computed, getCurrentInstance, onMounted, onUnmounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useSearchHistoryStore} from "@/stores/SearchHistoryStore";
+import Confirm from "@/utils/Confirm";
 
 
 defineProps({
@@ -188,7 +188,7 @@ const navJump = (url: string) => {
 };
 
 const logout = async () => {
-  proxy.Confirm({
+  Confirm({
     message: "确定要退出吗？",
     okfun: async () => {
       await UserService.logout();

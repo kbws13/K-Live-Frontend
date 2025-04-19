@@ -32,7 +32,7 @@
         <div class="list-item" v-else>
           <div class="cover" @click="jump(item)">
             <div class="move-handler iconfont icon-move" v-if="myself"></div>
-            <Cover :source="item.cover"></Cover>
+            <Cover :src="item.cover"></Cover>
           </div>
           <div class="list-name" @click="jump(item)">{{ item.name }}</div>
           <div class="play-count-info">
@@ -92,6 +92,19 @@ const getSeriesDetail = async () => {
   }
   seriesInfo.value = result.series
   videoList.value = result.seriesContentList
+  if(myself) {
+    const addItem: SeriesContent = {
+      seriesId: -1,
+      videoId: 'add',
+      userId: '',
+      sort: 0,
+      cover: '', // 可配默认图片
+      name: '添加视频',
+      playCount: 0,
+      createTime: new Date(),
+    }
+    videoList.value.unshift(addItem)
+  }
 }
 getSeriesDetail()
 

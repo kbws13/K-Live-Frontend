@@ -34,7 +34,7 @@ const loadDataList = async () => {
     return
   }
   const dataList = dataSource.value.records
-  dataSource.value = Object.assign({}, result.records)
+  dataSource.value = Object.assign({}, result)
   if (result.current > 1) {
     dataSource.value.records = dataList.concat(result.records)
   }

@@ -144,6 +144,9 @@ const getVideoInfo = async () => {
   resultData.introduction = introduction;
   resultData.tags = tags;
   videoInfo.value = resultData;
+  videoInfo.value.likeCountActive = false;
+  videoInfo.value.collectCountActive = false;
+  videoInfo.value.coinCountActive = false;
   //获取用户行为
   const userActionList = result.userActionList;
   userActionList.forEach((item) => {

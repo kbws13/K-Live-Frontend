@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table ref="dataTable" :data="dataSource!.list || []" :height="tableHeight" :stripe="options.stripe"
+        <el-table ref="dataTable" :data="dataSource!.records || []" :height="tableHeight" :stripe="options.stripe"
             :border="options.border" header-row-class-name="table-header-row" highlight-current-row
             @row-click="handleRowClick" @selection-change="handleSelectionChange">
             <!--selection选择框-->
@@ -29,8 +29,8 @@
         </el-table>
         <!-- 分页 -->
         <div class="pagination" v-if="showPagination">
-            <el-pagination v-if="dataSource!.totalCount" background :total="dataSource!.totalCount"
-                :page-sizes="[15, 30, 50, 100]" :page-size="dataSource!.pageSize" :current-page.sync="dataSource!.pageNo"
+            <el-pagination v-if="dataSource!.totalCount != 0" background :total="dataSource!.totalCount"
+                :page-sizes="[15, 30, 50, 100]" :page-size="dataSource!.pageSize" :current-page.sync="dataSource!.current"
                 layout="total, sizes, prev, pager, next, jumper" @size-change="handlePageSizeChange"
                 @current-change="handlePageNoChange" style="text-align: right"></el-pagination>
         </div>
@@ -58,7 +58,7 @@ const props = defineProps({
     extHeight: {
         default: 70,
     },
-    columns: Array,
+    columns: Array<any>,
     fetch: {
       type: Function,
       required: true,

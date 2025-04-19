@@ -9,8 +9,8 @@ export class InteractService {
      * 执行行为
      * @param actionDoRequest
      */
-    public static async doAction(actionDoRequest: ActionDoRequest): Promise<void> {
-        return await request({
+    public static async doAction(actionDoRequest: ActionDoRequest): Promise<boolean> {
+        return await request<boolean>({
             url: Interact.doAction,
             method: 'POST',
             body: actionDoRequest,

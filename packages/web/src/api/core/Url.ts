@@ -4,6 +4,8 @@ export const Interact = {
     // 弹幕
     postDanmu: "/interact/danmu/postDanmu",
     loadDanmu: "/interact/danmu/loadDanmu",
+    loadAllDanmu: "/interact/danmu/loadAllDanmu",
+    deleteDanmu: "/interact/danmu/deleteDanmu",
     // 评论
     loadAllComment: "/interact/comment/loadAllComment",
     loadComment: "/interact/comment/loadComment",

@@ -12,7 +12,7 @@
       </template>
 
       <template #slotOperation="{ row }">
-        <a href="javascript:void(0)" class="a-link" @click="delDanmu(row.danmuId)">删除</a>
+        <a href="javascript:void(0)" class="a-link" @click="delDanmu(row.id)">删除</a>
       </template>
 
       <template #slotText="{row}">
@@ -24,12 +24,15 @@
 </template>
 
 <script lang="ts" setup>
+import Table from "@/components/Table.vue";
 import VideoSearchSelect from "@/views/CreateCenter/VideoSearchSelect.vue";
 import Local from "web/src/utils/Local";
 import {ref} from "vue";
 import {useRoute} from "vue-router";
 import Confirm from "@/utils/Confirm";
 import Message from "@/utils/Message";
+import {DanmuService} from "@/api/services/DanmuService";
+import type {DanmuQuery} from "@/api/models/request/Danmu/DanmuQuery";
 
 const route = useRoute()
 
@@ -75,33 +78,28 @@ const tableOptions = ref({
   extHeight: 10,
 })
 
-const tableData = ref({})
+const tableData = ref({
+  current: 1,
+  pageSize: 20,
+});
 const loadDataList = async () => {
   let params = {
-    pageNo: tableData.value.pageNo,
+    pageNo: tableData.value.current,
     pageSize: tableData.value.pageSize,
     videoId: currentVideoId.value,
   }
-  let result = await proxy.Request({
-    url: proxy.Api.ucLoadDanmu,
-    params: params,
-  })
+  let result = await DanmuService.loadAllDanmu(params as DanmuQuery);
   if (!result) {
     return
   }
-  Object.assign(tableData.value, result.data)
+  Object.assign(tableData.value, result);
 }
 
-const delDanmu = (danmuId) => {
+const delDanmu = (danmuId: number) => {
   Confirm({
     message: '确定要删除吗？',
     okfun: async () => {
-      let result = await proxy.Request({
-        url: proxy.Api.ucDelDanmu,
-        params: {
-          danmuId,
-        },
-      })
+      let result = await DanmuService.deleteDanmu(danmuId);
       if (!result) {
         return
       }

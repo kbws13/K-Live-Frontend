@@ -33,4 +33,9 @@ const loadData = (e: any) => {
 </script>
 
 <style lang="scss" scoped>
+.search-panel {
+  width: 200px;
+  float: right;
+  height: 40px;
+}
 </style>
