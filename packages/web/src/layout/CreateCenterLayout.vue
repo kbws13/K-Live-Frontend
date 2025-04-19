@@ -85,7 +85,7 @@ const defaultActive = ref()
 const defaultOpeneds = ref([])
 const init = () => {
     menuList.forEach((item) => {
-        defaultOpeneds.value.push(item.path)
+        defaultOpeneds.value.push(item.path as string)
     })
 }
 init()

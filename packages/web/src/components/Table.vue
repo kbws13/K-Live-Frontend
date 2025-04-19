@@ -104,24 +104,24 @@ const setCurrentRow = (rowKey, rowValue) => {
 defineExpose({ setCurrentRow, clearSelection });
 
 //行点击
-const handleRowClick = (row) => {
+const handleRowClick = (row: any) => {
     emit("rowClick", row);
 };
 
 //多选
-const handleSelectionChange = (row) => {
+const handleSelectionChange = (row: any) => {
     emit("rowSelected", row);
 };
 
 //切换每页大小
-const handlePageSizeChange = (size) => {
+const handlePageSizeChange = (size: number) => {
     props.dataSource.pageSize = size;
-    props.dataSource.pageNo = 1;
+    props.dataSource.current = 1;
     props.fetch();
 };
 // 切换页码
-const handlePageNoChange = (pageNo) => {
-    props.dataSource.pageNo = pageNo;
+const handlePageNoChange = (current: number) => {
+    props.dataSource.current = current;
     props.fetch();
 };
 
