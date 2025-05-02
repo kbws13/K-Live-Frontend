@@ -7,8 +7,8 @@ import type {DanmuQuery} from "@/api/models/request/Danmu/DanmuQuery";
 import type {Page} from "@/common/Page";
 
 export class DanmuService {
-  public static async postDanmu(danmuPostRequest: DanmuPostRequest): Promise<void> {
-    return request<void>({
+  public static async postDanmu(danmuPostRequest: DanmuPostRequest): Promise<boolean> {
+    return request<boolean>({
       url: Interact.postDanmu,
       method: 'POST',
       body: danmuPostRequest,

@@ -43,7 +43,7 @@ const coverFile = asyncComputed(async () => {
     return null
   }
   if (typeof props.coverImage == 'string') {
-    return Resource.getResource + props.coverImage
+    return `/api${Resource.getResource + props.coverImage}`
   } else if (props.coverImage instanceof File) {
     return await convertFile2Base64(proxy.coverImage)
   }

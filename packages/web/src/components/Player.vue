@@ -182,7 +182,7 @@ const postDanmu = async (danmu: Danmu) => {
     danmu.fileId = fileId.value
     danmu.videoId = route.params.videoId as string
     danmu.time = Math.round(danmu.time)
-    await DanmuService.postDanmu({
+    const res = await DanmuService.postDanmu({
         videoId: danmu.videoId,
         fileId: fileId.value,
         text: danmu.text,
@@ -190,6 +190,11 @@ const postDanmu = async (danmu: Danmu) => {
         color: danmu.color,
         time: danmu.time,
     });
+    if(res) {
+      Message.success("发送弹幕成功");
+    } else {
+      Message.error("发送弹幕失败");
+    }
 }
 
 //弹幕数量

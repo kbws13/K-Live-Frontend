@@ -78,6 +78,7 @@ const show = (data: UserVO) => {
   dialogConfig.value.show = true
   nextTick(() => {
     formDataRef.value.resetFields()
+    console.log(data.avatar)
     formData.value = Object.assign({}, data)
   })
 }

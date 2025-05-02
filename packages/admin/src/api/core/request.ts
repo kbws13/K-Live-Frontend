@@ -41,7 +41,7 @@ instance.interceptors.response.use(
         if (responseData.code == 0) {
             return responseData.data;
         } else if (responseData.code == 40000) {
-            Message.error("请求参数错误");
+            Message.error(responseData.message);
         } else if (responseData.code == 40100) {
             return Promise.reject({ showError: false });
         }
