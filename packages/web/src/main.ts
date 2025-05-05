@@ -58,7 +58,7 @@ app.config.globalProperties.videoAccept = ".mp4,.avi,.rmvb,.mkv,.mov";
 //图片后缀
 app.config.globalProperties.imageAccept = ".jpg,.png,.gif,.bmp,.webp";
 //轮播最多显示的视频数
-app.config.globalProperties.carouselMaxCount = 5;
+app.config.globalProperties.carouselMaxCount = 2;
 //bodyPaddingWidth
 app.config.globalProperties.bodyPadding = 150
 app.mount('#app')

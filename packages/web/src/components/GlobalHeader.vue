@@ -77,7 +77,7 @@
             <div class="nick-name">{{ loginStore.userInfo.nickName }}</div>
             <div class="count-info">
               <div class="count-info-item">
-                <div class="count-value">{{ userCountInfo?.fansCount ?? 0 }}</div>
+                <div class="count-value">{{ userCountInfo?.focusCount ?? 0 }}</div>
                 <div class="count-title">关注</div>
               </div>
               <div class="count-info-item">

@@ -103,7 +103,6 @@ const loadDataList = async () => {
   if (!result) {
     return
   }
-  console.log(result)
   dataSource.value = result
 }
 
@@ -121,7 +120,7 @@ const goDetail = (videoId: string) => {
 }
 
 watch(
-    () => route.fullPath,
+    () => route.query.keyword,
     (newVal) => {
       if (newVal) {
         console.log("触发加载数据")

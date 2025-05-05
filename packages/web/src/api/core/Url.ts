@@ -34,6 +34,7 @@ export const Web = {
     // 用户
     checkCode: "/web/user/checkCode",
     login: "/web/user/login",
+    register: "/web/user/register",
     logout: "/web/user/logout",
     autoLogin: "/web/user/autoLogin",
     // 个人中心

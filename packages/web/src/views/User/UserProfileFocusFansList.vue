@@ -1,7 +1,7 @@
 <template>
   <div class="body-container">
     <div class="body-title">
-      {{ route.name == "uhomeFocus" ? "我的关注" : "我的粉丝" }}
+      {{ route.name == "userProfileFocus" ? "我的关注" : "我的粉丝" }}
     </div>
     <DataList :dataSource="dataSource" @loadData="loadDataList">
       <template #default="{ data }">
@@ -30,13 +30,13 @@
                 link
                 type="primary"
                 @click="cancelFocus(data.otherUserId)"
-                v-if="route.name == 'uhomeFocus' || data.focusType == 1"
+                v-if="route.name == 'userProfileFocus' || data.focusType == 1"
             >取消关注</el-button
             >
 
             <el-button
                 type="primary"
-                v-if="route.name == 'uhomeFans' && data.focusType == 0"
+                v-if="route.name == 'userProfileFans' && data.focusType == 0"
                 @click="focus(data.otherUserId)"
             >关注</el-button
             >
@@ -56,24 +56,31 @@ import type {Page} from "@/common/Page";
 import type {FocusVO} from "@/api/models/response/Focus/FocusVO";
 
 const route = useRoute();
-const dataSource = ref<Page<FocusVO>>({} as Page<FocusVO>);
-const isFocus = route.name == "uhomeFocus";
+const dataSource = ref<Page<FocusVO>>({
+  current: 1,
+  size: 10,
+  total: 0,
+  records: [],
+  pageTotal: 1,
+  searchCount: false,
+} as Page<FocusVO>);
+const isFocus = route.name == "userProfileFocus";
 const loadDataList = async () => {
   if(isFocus) {
-    const result = await HomeService.loadFocusList(dataSource.value.pageNo);
+    const result = await HomeService.loadFocusList(dataSource.value.current);
     if (!result) {
       return;
     }
     dataSource.value = result;
   } else {
-    const result = await HomeService.loadFansList(dataSource.value.pageNo);
+    const result = await HomeService.loadFansList(dataSource.value.current);
     if (!result) {
       return;
     }
     dataSource.value = result;
   }
 };
-
+loadDataList();
 const cancelFocusUser = inject("cancelFocusUser");
 const cancelFocus = (otherUserId: string) => {
   // @ts-ignore

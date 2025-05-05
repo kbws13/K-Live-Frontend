@@ -3,6 +3,7 @@ import { Web } from "../core/Url";
 import type { UserLoginRequest } from "../models/request/User/UserLoginRequest";
 import type { CheckCodeVO } from "../models/response/User/CheckCodeVO";
 import type { UserVO } from "../models/response/User/UserVO";
+import type {UserRegistryRequest} from "@/api/models/request/User/UserRegistryRequest";
 
 export class UserService {
 
@@ -29,6 +30,15 @@ export class UserService {
             url: Web.login,
             method: 'POST',
             body: userLoginRequest,
+            dataType: 'json'
+        })
+    }
+
+    public static async register(userRegistryRequest: UserRegistryRequest): Promise<boolean>{
+        return await request<boolean>({
+            url: Web.register,
+            method: 'POST',
+            body: userRegistryRequest,
             dataType: 'json'
         })
     }

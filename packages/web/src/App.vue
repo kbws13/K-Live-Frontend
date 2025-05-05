@@ -14,10 +14,12 @@ import { useCategoryStore } from "./stores/CategoryStore";
 import type { Category } from "./api/models/response/Category/Category";
 import { CategoryService } from "./api/services/CategoryService";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import {useSearchHistoryStore} from "@/stores/SearchHistoryStore";
 
 const loginStore = userLoginStore();
 const systemSettingStore = useSystemSettingStore();
 const categoryStore = useCategoryStore();
+const searchHistoryStore = useSearchHistoryStore()
 
 let categoryList: Category[] = [];
 let categoryMap: { [key: string]: Category } = {};
@@ -74,6 +76,7 @@ onBeforeMount(() => {
   autoLogin();
   loadSystemSetting();
   loadCategory();
+  searchHistoryStore.initHistory();
 })
 
 onMounted(() => {

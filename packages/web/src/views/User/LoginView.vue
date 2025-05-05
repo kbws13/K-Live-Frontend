@@ -76,12 +76,13 @@ import { userLoginStore } from '@/stores/UserStore';
 import { getCurrentInstance, nextTick, onMounted, onUpdated, ref } from 'vue';
 import { md5 } from "js-md5";
 import Message from '@/utils/Message';
+import type {UserRegistryRequest} from "@/api/models/request/User/UserRegistryRequest";
 
 // @ts-ignore
 const { proxy } = getCurrentInstance();
 const loginStore = userLoginStore();
 
-const checkCodeInfo = ref<CheckCodeVO>();
+const checkCodeInfo = ref<CheckCodeVO>({} as CheckCodeVO);
 const changeCheckCode = async () => {
     const res = await UserService.checkCode();
     if (!res) {
@@ -151,16 +152,18 @@ const submit = async (type: number) => {
     loginStore.saveUserInfo(res);
     proxy.VueCookies.set("token", res.token);
   } else {
-    const data: UserLoginRequest = {
+    const data: UserRegistryRequest = {
       email: formData.value.email,
-      password: md5(formData.value.password)
+      nickName: formData.value.nickName,
+      password: formData.value.password,
+      checkPassword: formData.value.password,
+      checkCode: formData.value.checkCode,
+      checkCodeKey: checkCodeInfo.value.checkCodeKey,
     }
-    const res = await UserService.login(data)
+    const res = await UserService.register(data)
     if (!res) return;
-    Message.success('登录成功');
+    Message.success('注册成功');
     loginStore.setLogin(false);
-    loginStore.saveUserInfo(res);
-    proxy.VueCookies.set("token", res.token);
   }
 }
 

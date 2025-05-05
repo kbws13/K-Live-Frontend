@@ -19,7 +19,7 @@ export class HomeService {
             body: {
                 focusUserId: focusUserId
             },
-            dataType: "json"
+            dataType: "url"
         })
     }
 
