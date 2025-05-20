@@ -28,7 +28,7 @@ let categoryMap: { [key: string]: Category } = {};
  * 全局初始化函数
  */
 const doInit = () => {
-  console.log("I'm kbws. Welcome to K-Live");
+  console.log("I'm kbws. Welcome to K-Live👋");
 };
 
 const autoLogin = async() => {

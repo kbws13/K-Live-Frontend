@@ -124,7 +124,7 @@
           <a
               class="a-link"
               href="javascript:void(0)"
-              @click.prevent="delAccount(row)"
+              @click.prevent="delVideo(row)"
           >删除</a
           >
         </div>
@@ -264,11 +264,14 @@ const audit = (row: VideoPostVO) => {
   auditRef.value.show(row.id);
 };
 //删除
-const delAccount = (data: VideoPostVO) => {
+const delVideo = (data: VideoPostVO) => {
   Confirm({
     message: `确定要删除【${data.name}】吗？`,
     okfun: async () => {
-      await VideoService.deleteVideo(data.id);
+      const res = await VideoService.deleteVideo(data.id);
+      if(!res) {
+        Message.error("操作失败");
+      }
       Message.success("操作成功");
       await loadDataList();
     },

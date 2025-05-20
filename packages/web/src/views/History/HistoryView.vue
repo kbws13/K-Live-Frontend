@@ -13,7 +13,7 @@
             <el-timeline-item :timestamp="Local.formatDate(data.lastUpdateTime)" placement="top">
               <div class="history-item">
                 <div class="cover" @click="goDetail(data.videoId)">
-                  <Cover :src="data.videoCover"></Cover>
+                  <Cover :src="data.videoCover" defaultImage="404.png"></Cover>
                 </div>
                 <div class="video-info">
                   <div @click="goDetail(data.videoId)">

@@ -144,6 +144,7 @@ import {computed, getCurrentInstance, onMounted, onUnmounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useSearchHistoryStore} from "@/stores/SearchHistoryStore";
 import Confirm from "@/utils/Confirm";
+import VueCookies from "vue-cookies";
 
 
 defineProps({
@@ -192,7 +193,8 @@ const logout = async () => {
     message: "确定要退出吗？",
     okfun: async () => {
       await UserService.logout();
-      proxy.VueCookies.remove("token");
+      // @ts-ignore
+      VueCookies.remove("token");
       loginStore.saveUserInfo({} as UserVO);
       Message.success('退出成功');
     }

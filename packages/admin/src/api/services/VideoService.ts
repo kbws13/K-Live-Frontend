@@ -52,8 +52,8 @@ export class VideoService {
      * 删除视频接口
      * @param videoId
      */
-    public static async deleteVideo(videoId: string): Promise<void> {
-        return await request<void>({
+    public static async deleteVideo(videoId: string): Promise<boolean> {
+        return await request<boolean>({
             url: Admin.deleteVideo,
             method: "POST",
             body: {

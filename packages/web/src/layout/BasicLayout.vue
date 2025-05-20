@@ -33,14 +33,7 @@
         <CategoryWidget :showType="0"></CategoryWidget>
       </div>
       <div class="body-main">
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in" appear>
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </transition>
-        </router-view>
-        <!-- <router-view></router-view> -->
+         <router-view></router-view>
       </div>
     </div>
     <LoginView />

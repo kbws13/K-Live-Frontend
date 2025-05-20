@@ -32,6 +32,7 @@ import {CategoryService} from "@/api/services/CategoryService";
 const dialogConfig = ref({
   show: false,
   title: '新增分类',
+  isEdit: false,
   buttons: [
     {
       type: 'primary',
@@ -48,6 +49,7 @@ const formDataRef = ref()
 
 const showEdit = (data: Category) => {
   dialogConfig.value.show = true
+  dialogConfig.value.isEdit = true
   nextTick(() => {
     formDataRef.value.resetFields()
     if (data.id == null) {
@@ -77,7 +79,12 @@ const submitForm = async () => {
     params.background = await uploadImage(params.background)
   }
 
-  let result = await CategoryService.addCategory(params)
+  let result
+  if(dialogConfig.value.isEdit) {
+    result = await CategoryService.updateCategory(params)
+  } else {
+    result = await CategoryService.addCategory(params)
+  }
   if (!result) {
     return
   }
