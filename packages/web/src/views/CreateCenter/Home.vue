@@ -95,7 +95,7 @@ const getActualTimeStatisticsInfo = async () => {
     // @ts-ignore
     const totalCountInfo = result.totalCountInfo;
     // @ts-ignore
-    const preDayData = result.preDayData;
+    const preDayData = result.preDayInfo;
 
     dataPartList.value.forEach((item) => {
         item.totalCount = totalCountInfo[item.totalCountKey];
@@ -166,7 +166,7 @@ const loadWeekData = async () => {
             {
                 type: "value",
                 axisLabel: {
-                    formatter: "{value} °C",
+                    formatter: "{value}",
                 },
             },
         ],
